@@ -1,13 +1,13 @@
 ### Hey there 👋 ![Visitor Badge](https://visitor-badge.laobi.icu/badge?page_id=thecreazy.thecreazy)
 
 <a href="https://www.linkedin.com/in/riccardocanella/" target="_blank">
-  <img alt="Borja's LinkedIn" width="22px" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/linkedin.svg" />
+  <img src="https://img.shields.io/badge/-Linkedin-blue?style=flat&logo=linkedin" title="Go To mail" alt="Canella Riccardo linkedin"/>
 </a>
 <a href="https://github.com/thecreazy">
-  <img alt="Borja's GitHub" width="22px" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/github.svg" />
+   <img src="https://img.shields.io/badge/-Github-black?style=flat&logo=github" title="Go To mail" alt="Canella Riccardo github"/>
 </a>
 <a href="mailto:canella_riccardo@icloud.com">
-  <img alt="Borja's Mail" width="22px" src="https://cdn.jsdelivr.net/npm/simple-icons@v3/icons/gmail.svg" />
+   <img src="https://img.shields.io/badge/canella_riccardo@icloud.com-black?logo=icloud" title="Go To mail" alt="Canella Riccardo mail"/>
 </a> 
 <br />
 
@@ -23,7 +23,7 @@
 ![Git](https://img.shields.io/badge/-Git-black?style=flat&logo=git)
 - 💬 Talking about me, I'm a huge fan of basketball and Photography.
 - 📫 How to reach me: <a href="mailto:canella_riccardo@icloud.com" alt="Canella Riccardo mail">
-  <img src="https://img.shields.io/badge/canella_riccardo@icloud.com-black?logo=icloud-bl" title="Go To mail" alt="Canella Riccardo mail"/>
+  <img src="https://img.shields.io/badge/canella_riccardo@icloud.com-black?logo=icloud" title="Go To mail" alt="Canella Riccardo mail"/>
 </a>
 
 ![Github Stats](https://github-readme-stats.vercel.app/api?username=thecreazy&count_private=true&show_icons=true&include_all_commits=true&theme=tokyonight)
