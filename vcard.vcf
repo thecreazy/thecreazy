@@ -1,0 +1,16 @@
+BEGIN:VCARD
+VERSION:3.0
+FN;CHARSET=UTF-8:Riccardo Canella
+N;CHARSET=UTF-8:Canella;Riccardo;;;
+NICKNAME;CHARSET=UTF-8:thecreazt
+GENDER:M
+BDAY:19920819
+EMAIL;CHARSET=UTF-8;type=HOME,INTERNET:canella_riccardo@icloud.com
+EMAIL;CHARSET=UTF-8;type=WORK,INTERNET:riccardo.canella@lastminute.com
+TEL;TYPE=CELL:3208637012
+TITLE;CHARSET=UTF-8:Snr. Frontend Developer
+ORG;CHARSET=UTF-8:lastminute.com / hotelscan
+URL;CHARSET=UTF-8:https://canellariccardo.it/
+URL;type=WORK;CHARSET=UTF-8:https://hotelscan.com/
+REV:2021-03-15T09:45:50.633Z
+END:VCARD
