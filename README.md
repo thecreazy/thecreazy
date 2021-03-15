@@ -26,6 +26,10 @@
   <img src="https://img.shields.io/badge/canella_riccardo@icloud.com-black?logo=icloud" title="Go To mail" alt="Canella Riccardo mail"/>
 </a>
 
+or scan this qrcode:
+
+<img src="https://github.com/thecreazy/thecreazy/blob/main/qrcode.png" alt="contact qrcode" width="200"/>
+
 ![Github Stats](https://github-readme-stats.vercel.app/api?username=thecreazy&count_private=false&show_icons=true&include_all_commits=true&theme=tokyonight)
 ![Top Langs](https://github-readme-stats.vercel.app/api/top-langs/?username=thecreazy&layout=compact&hide=jupyter%20notebook,css&theme=chartreuse-dark&langs_count=9)
 
