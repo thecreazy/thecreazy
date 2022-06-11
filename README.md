@@ -13,7 +13,7 @@
 
 **Hi! I'm Riccardo Canella, a Software Engineer and Web Developer from Italy.**
 
-- 👷 I’m currently working developing web apps in [lastminute.com](http://lastminute.com)/[hotelscan](http://hotelscan.com/ab-b)
+- 👷 I’m currently doint frontend stuffs in [Jobtome](http://weare.jobtome.com)
 - 🖊️ Sometimes I write on my medium blog: [blog.canellariccardo.it](https://blog.canellariccardo.it)
 - 📚 I’m currently learning  ![Go](https://img.shields.io/badge/-Go-black?style=flat&logo=go)
 - 📊 I usually work with:
