@@ -1,13 +1,14 @@
 {
   "name": "thecreazy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "My personal site repo",
   "scripts": {
     "build:html": "node ./src/md-to-html.js",
     "lint": "eslint ./",
     "lint:fix": "eslint ./ --fix",
     "version": "npx changeset version",
-    "commit": "npx changeset"
+    "commit": "npx changeset",
+    "release": "npx changeset publish"
   },
   "keywords": [
     "threcreazy",
