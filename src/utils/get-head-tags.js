@@ -10,6 +10,7 @@ function getHeadTags() {
         <meta name="language" content="English">
         <meta name="revisit-after" content="1 days">
         <meta name="author" content="Riccardo Canella - @thecreazy">
+        <meta name="viewport" content="initial-scale">
     `;
 }
 

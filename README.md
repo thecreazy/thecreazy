@@ -17,10 +17,6 @@
 [/instagram](https://thecreazy.link/ig)
 [/photos](https://thecreazy.link/photos)
 
-or scan this qrcode:
-
-<img src="https://github.com/thecreazy/thecreazy/blob/main/public/qrcode.png" alt="contact qrcode" width="200"/>
-
 ## What i code:
 
 * [Siteaudit](https://github.com/thecreazy/siteaudit) Siteaudit will analyze your site and generate audit for: Pagespeed, Lighthouse, A11y.

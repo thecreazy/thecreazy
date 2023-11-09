@@ -1,0 +1,12 @@
+version: "3.9"
+
+services:
+    app:
+        container_name: canellariccardo
+        image: thecreazy-site
+        build:
+            context: .
+            dockerfile: Dockerfile
+        restart: always
+        ports:
+            - "8080:8080"
