@@ -3,8 +3,18 @@
   "version": "1.0.0",
   "description": "My personal site repo",
   "scripts": {
+    "build:html": "node ./src/md-to-html.js"
   },
-  "keywords": ["threcreazy", "repo", "site", "portfolio", "personal site"],
+  "keywords": [
+    "threcreazy",
+    "repo",
+    "site",
+    "portfolio",
+    "personal site"
+  ],
   "author": "@thecreazy <canella_riccardo@icloud.com>",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "showdown": "^2.1.0"
+  }
 }
