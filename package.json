@@ -1,0 +1,10 @@
+{
+  "name": "thecreazy",
+  "version": "1.0.0",
+  "description": "My personal site repo",
+  "scripts": {
+  },
+  "keywords": ["threcreazy", "repo", "site", "portfolio", "personal site"],
+  "author": "@thecreazy <canella_riccardo@icloud.com>",
+  "license": "ISC"
+}
