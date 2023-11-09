@@ -3,7 +3,7 @@ const readMD = require("./utils/read-md");
 const saveOnFile = require("./utils/save-on-file");
 const getHeadTags = require("./utils/get-head-tags");
 
-(function () {
+(function main() {
   const mdInfos = readMD(path.join(__dirname, "..", "README.md"));
   const headTags = getHeadTags();
   const htmlStructure = `

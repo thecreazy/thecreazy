@@ -6,11 +6,26 @@ function readMD(path) {
     smartIndentationFix: true,
     openLinksInNewWindow: true,
     moreStyling: true,
-    customizedHeaderId: true,
+    noHeaderId: true,
   });
+  converter.setFlavor("github");
+
   const mdText = fs.readFileSync(path, "utf-8");
+
   const html = converter.makeHtml(mdText);
-  return html;
+
+  let x = 0;
+  const htmlWithSections = html.replace(
+    /<h2[^>]*>([^<]+)<\/h2>/g,
+    (_, p1) =>
+      `${x++ > 0 ? "</section>" : ""}` +
+      `<section id="${p1
+        .toLowerCase()
+        .replace(/ /g, "")
+        .replace(":", "")}"><h2>${p1}</h2>`,
+  );
+
+  return htmlWithSections;
 }
 
 module.exports = readMD;
