@@ -3,13 +3,16 @@
   "version": "1.0.2",
   "description": "My personal site repo",
   "scripts": {
-    "build": "pnpm run build:html",
+    "build": "pnpm run build:html && pnpm run build:css",
     "build:html": "node ./src/md-to-html.js",
+    "build:css": " lessc ./src/style/index.less ./dist/index.css",
+    "watch:css": "less-watch-compiler",
     "lint": "eslint ./",
     "lint:fix": "eslint ./ --fix",
     "version": "npx changeset version && npx changeset tag",
     "commit": "npx changeset",
-    "release": "npx changeset publish"
+    "release": "npx changeset publish",
+    "serve": "npx serve ./dist"
   },
   "keywords": [
     "threcreazy",
@@ -21,6 +24,7 @@
   "author": "@thecreazy <canella_riccardo@icloud.com>",
   "license": "ISC",
   "dependencies": {
+    "serve": "^14.2.1",
     "showdown": "^2.1.0"
   },
   "devDependencies": {
@@ -33,6 +37,7 @@
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.3.0",
+    "less": "^4.2.0",
     "prettier": "^3.0.3"
   }
 }
