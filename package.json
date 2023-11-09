@@ -10,7 +10,7 @@
     "lint": "eslint ./",
     "lint:fix": "eslint ./ --fix",
     "version": "npx changeset version && npx changeset tag",
-    "commit": "npx changeset",
+    "commit": "git add . && npx changeset add",
     "release": "npx changeset publish",
     "serve": "npx serve ./dist"
   },
