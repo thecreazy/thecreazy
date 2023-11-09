@@ -1,5 +1,15 @@
 # thecreazy
 
+## 1.1.0
+
+### Minor Changes
+
+- 17345c1: First css release
+
+### Patch Changes
+
+- b1380db: use only commit script
+
 ## 1.0.2
 
 ### Patch Changes
