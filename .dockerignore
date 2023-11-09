@@ -1,11 +1,9 @@
 node_modules
-src
 .git
 .eslintrc.json
-.giignore
+.gitignore
 .dockerignore
 docker-compose.yml
 Dockerfile
-package.json
-pnpm-lock.yaml
-README.md
+dist
+CHANGELOG.md

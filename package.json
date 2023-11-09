@@ -3,10 +3,11 @@
   "version": "1.0.1",
   "description": "My personal site repo",
   "scripts": {
+    "build": "pnpm run build:html",
     "build:html": "node ./src/md-to-html.js",
     "lint": "eslint ./",
     "lint:fix": "eslint ./ --fix",
-    "version": "npx changeset version",
+    "version": "npx changeset version && npx changeset tag",
     "commit": "npx changeset",
     "release": "npx changeset publish"
   },
