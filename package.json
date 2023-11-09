@@ -6,7 +6,8 @@
     "build:html": "node ./src/md-to-html.js",
     "lint": "eslint ./",
     "lint:fix": "eslint ./ --fix",
-    "version": "npx changeset version"
+    "version": "npx changeset version",
+    "commit": "npx changeset"
   },
   "keywords": [
     "threcreazy",
