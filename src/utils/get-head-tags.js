@@ -1,5 +1,5 @@
-function getHeadTags(){
-    return `
+function getHeadTags() {
+  return `
         <meta charset="utf-8">
         <title>Riccardo canella</title>
         <meta name="title" content="Riccardo canella">
@@ -10,8 +10,7 @@ function getHeadTags(){
         <meta name="language" content="English">
         <meta name="revisit-after" content="1 days">
         <meta name="author" content="Riccardo Canella - @thecreazy">
-    `
+    `;
 }
 
 module.exports = getHeadTags;
-

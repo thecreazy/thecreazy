@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "My personal site repo",
   "scripts": {
-    "build:html": "node ./src/md-to-html.js"
+    "build:html": "node ./src/md-to-html.js",
+    "lint": "eslint ./",
+    "lint:fix": "eslint ./ --fix"
   },
   "keywords": [
     "threcreazy",
@@ -14,7 +16,18 @@
   ],
   "author": "@thecreazy <canella_riccardo@icloud.com>",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
     "showdown": "^2.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.53.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-config-prettier": "^9.0.0",
+    "eslint-plugin-import": "^2.29.0",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-prettier": "^5.0.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.3.0",
+    "prettier": "^3.0.3"
   }
 }
