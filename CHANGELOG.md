@@ -1,5 +1,11 @@
 # thecreazy
 
+## 1.2.3
+
+### Patch Changes
+
+- e495174: project readme
+
 ## 1.2.2
 
 ### Patch Changes
