@@ -1,5 +1,11 @@
 # thecreazy
 
+## 1.2.4
+
+### Patch Changes
+
+- 66b023e: feat(style): color scheme
+
 ## 1.2.3
 
 ### Patch Changes
