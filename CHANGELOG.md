@@ -1,5 +1,12 @@
 # thecreazy
 
+## 1.2.2
+
+### Patch Changes
+
+- 2a37c73: added docktype html
+- 4d94998: font display swap
+
 ## 1.2.1
 
 ### Patch Changes
