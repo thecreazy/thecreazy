@@ -1,11 +1,13 @@
-:root.dark {
+:root {
+    --background-color: #f7f7f7;
+    --text-color: rgb(41, 40, 40);
+    --title-color: rgb(1, 71, 15);
+    --switch-color: linear-gradient(245deg, rgba(1,71,15,1) 15%, rgba(247,247,247,1) 105%);
+}
+
+:root [data-theme=dark] {
     --background-color: #111;
     --text-color:rgb(255, 255, 255) ;
-    --title-color: rgb(181, 7, 7);
-  }
-
-:root {
-    --background-color: #f3f9ff;
-    --text-color: rgb(89, 89, 89);
-    --title-color: rgb(61, 61, 61)
+    --title-color: rgb(85, 165, 102);
+    --switch-color: linear-gradient(90deg, rgba(17,17,17,1) 0%, rgba(85,165,102,1) 100%);
 }

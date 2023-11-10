@@ -12,7 +12,15 @@ const getHeadTags = require("./utils/get-head-tags");
                 ${headTags}
             </head>
             <body>
+                <button id="theme-switch" aria-label="switch theme"></button>
                 ${mdInfos}
+                <script>
+                  document.getElementById("theme-switch").addEventListener('click', function(){
+                    const body = document.querySelector("body")
+                    if(body.getAttribute('data-theme') !== "dark") body.setAttribute("data-theme", "dark");
+                    else body.setAttribute("data-theme", 'default');
+                  }, false);
+                </script>
             </body>
         </html>
     `;
