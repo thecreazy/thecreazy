@@ -1,5 +1,19 @@
 # thecreazy
 
+## 1.2.0
+
+### Minor Changes
+
+- 3626d59: feat(core): switch theme button
+- 4c151ad: core(css): used css variables for styling
+
+### Patch Changes
+
+- 48878bf: feat(core): tablet style
+- 00f4cdf: feat(site): favicon
+- 7af2e14: feat(style): change theme smooth
+- d0e405f: feat(css): mobile ready
+
 ## 1.1.0
 
 ### Minor Changes
