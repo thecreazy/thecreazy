@@ -8,6 +8,13 @@ h1 {
     letter-spacing: .03em;
     white-space: nowrap;
     font-family: "Title";
+
+    .media( mobile-only, {
+        font-size: 38px;
+        line-height: 84px;
+        margin-top: 24px;
+    });
+   
 }
 
 h3 {
@@ -15,6 +22,11 @@ h3 {
     font-size: 20px;
     line-height: 30px;
     padding-bottom: 20px;
+
+    .media( mobile-only, {
+        line-height: 25px;
+    });
+  
 }
 
 #theme-switch {
@@ -27,4 +39,10 @@ h3 {
     background: var(--switch-color);
     border: none;
     cursor: pointer;
+
+    .media( mobile-only, {
+        top: 20px;
+        right: 24px;
+    });
+  
 }

@@ -17,6 +17,12 @@ body {
     -webkit-text-size-adjust: none;
     color: var(--text-color);
     font-family: 'Title';
+
+    .media( mobile-only, {
+        padding: 16px;
+        max-width: 100vw;
+    });
+
     ul {
         margin-bottom: 12px;
         padding-left: 32px;
@@ -24,6 +30,9 @@ body {
             font-size: 20px;
             line-height: 25px;
             margin-bottom: 6px;
+            .media(mobile-only, {
+                margin-bottom: 20px;
+            });
         }
     }
     a {
@@ -44,5 +53,10 @@ body {
             opacity: 1;
             filter: brightness(85%);
         }
+
+        .media(mobile-only, {
+            color: var(--title-color);
+            opacity: 0.9;
+        });
     }
 }

@@ -6,13 +6,23 @@ section {
         font-weight: bold;
         margin-top: 32px;
         margin-bottom: 16px;
+
+        .media( mobile-only, {
+            font-size: 30px;
+        });
     }
     &#whereyoucanfindme {
         a {
             font-weight: bold;
-            font-size: 0.9vw;
-            line-height: 1.1vw;
+            font-size: 18px;
+            line-height: 21px;
             color: var(--text-color);
+            
+            .media( mobile-only, {
+                font-size: 20px;
+                line-height: 33px;
+            });
+
         }
         p {
             margin-bottom: 12px;
