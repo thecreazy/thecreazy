@@ -1,6 +1,6 @@
 {
   "name": "thecreazy",
-  "version": "1.2.3",
+  "version": "1.2.4",
   "description": "My personal site repo",
   "scripts": {
     "build": "pnpm run build:html && pnpm run build:css",
