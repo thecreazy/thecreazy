@@ -1,5 +1,11 @@
 # thecreazy
 
+## 1.2.1
+
+### Patch Changes
+
+- ed3f0c5: fix blog links
+
 ## 1.2.0
 
 ### Minor Changes
