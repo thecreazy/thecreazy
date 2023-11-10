@@ -12,7 +12,7 @@ const getHeadTags = require("./utils/get-head-tags");
             <head>
                 ${headTags}
             </head>
-            <body>
+            <body data-theme="dark">
                 <button id="theme-switch" aria-label="switch theme"></button>
                 ${mdInfos}
                 <script>
