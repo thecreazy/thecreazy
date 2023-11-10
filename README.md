@@ -3,7 +3,7 @@
 ### From Italy living in Italy 🤌, where I work as a Lead Frontend Engineer at Jobtome.com/Hirematic. With a fullstack javascript background, my strength lies in websites and apps. If you want to know more about me, my work or if youʼre a head hunter who wants to offer me a lot of money, feel free to contact me on canella_riccardo[at]icloud.com. 
 
 - 👷 I’m currently doing frontend stuffs in [Jobtome](http://weare.jobtome.com)
-- 🖊️ Sometimes I write on my medium blog: [blog.canellariccardo.it](https://thecreazy.link/github)
+- 🖊️ Sometimes I write on my medium blog: [blog.canellariccardo.it](https://thecreazy.link/blog)
 - 📚 I’m currently learning  ![Go](https://img.shields.io/badge/-Go-black?style=flat&logo=go)
 - 💬 Talking about me, I'm a huge fan of basketball and Photography.
 
@@ -11,7 +11,7 @@
 
 [/portfolio](https://canellariccardo.it)
 [/github](https://thecreazy.link/github)
-[/blog](https://thecreazy.link/github)
+[/blog](https://thecreazy.link/blog)
 [/linkedin](https://thecreazy.link/linkedin)
 [/x](https://thecreazy.link/twitter)
 [/instagram](https://thecreazy.link/ig)
