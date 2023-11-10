@@ -7,7 +7,8 @@ const getHeadTags = require("./utils/get-head-tags");
   const mdInfos = readMD(path.join(__dirname, "..", "README.md"));
   const headTags = getHeadTags();
   const htmlStructure = `
-        <!DOCTYPE html lang="en">
+        <!DOCTYPE html>
+        <html lang="en">
             <head>
                 ${headTags}
             </head>
