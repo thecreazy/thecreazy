@@ -12,7 +12,8 @@
     "version": "npx changeset version && npx changeset tag",
     "commit": "git add . && npx changeset add",
     "release": "npx changeset publish",
-    "serve": "npx serve ./dist"
+    "serve": "npx serve ./dist",
+    "vercel-build": "pnpm run build && cp -R public dist"
   },
   "keywords": [
     "threcreazy",
