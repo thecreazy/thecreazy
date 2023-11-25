@@ -1,5 +1,11 @@
 # thecreazy
 
+## 1.3.0
+
+### Minor Changes
+
+- fa638c8: enable deploy on vercel
+
 ## 1.2.4
 
 ### Patch Changes
