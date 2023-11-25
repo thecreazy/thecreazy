@@ -32,7 +32,7 @@ I also added a GPC service discover session because I'm right now (2023/Nov) I'm
 
 The reson why i stopped the GCP env is really easy to understand
 
-<img src="https://canellariccardo.it/public/gcpbilling.jpg" width="100%" />
+<img src="https://canellariccardo.it/public/gcpbilling.png" width="100%" />
 
 28 Eur for half of a month it's really too much for a static page.
 
