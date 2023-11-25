@@ -38,4 +38,4 @@ The reson why i stopped the GCP env is really easy to understand
 
 I switched to vercel, same env, same features, but free.
 
-![Vercel](https://therealsujitk-vercel-badge.vercel.app/?app=tracreazy&style=for-the-badge)
+![Vercel](https://therealsujitk-vercel-badge.vercel.app/?app=thecreazy&style=for-the-badge)
