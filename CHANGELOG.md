@@ -1,5 +1,11 @@
 # thecreazy
 
+## 1.4.0
+
+### Minor Changes
+
+- 05b13f2: added new project
+
 ## 1.3.1
 
 ### Patch Changes
