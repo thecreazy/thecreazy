@@ -30,6 +30,8 @@
 
 ## What i write:
 
+- 2024
+  - [🔮 Become a Better Engineer, Step 2: Connect the dots](https://medium.com/@riccardocanella/become-a-better-engineer-step-2-connect-the-dots-e43f234fedba)
 - 2023
   - [🔮 Become a Better Engineer, Step 1: Awareness](https://blog.canellariccardo.it/become-a-better-engineer-step-1-awareness-872814a4e0c0)
 - 2022
