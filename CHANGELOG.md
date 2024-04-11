@@ -1,5 +1,11 @@
 # thecreazy
 
+## 1.5.0
+
+### Minor Changes
+
+- 9dc1356: Added Become a Better Engineer, Step 2: Connect the dots
+
 ## 1.4.0
 
 ### Minor Changes
