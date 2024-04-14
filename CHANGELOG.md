@@ -1,5 +1,11 @@
 # thecreazy
 
+## 1.5.1
+
+### Patch Changes
+
+- 7a6263c: Updated hireamtic url
+
 ## 1.5.0
 
 ### Minor Changes
