@@ -32,6 +32,7 @@
 
 - 2024
   - [🔮 Become a Better Engineer, Step 2: Connect the dots](https://medium.com/@riccardocanella/become-a-better-engineer-step-2-connect-the-dots-e43f234fedba)
+  - [👨‍💻 Demystifying Shader Components in Web Development](https://blog.canellariccardo.it/demystifying-shader-components-in-web-development-3cf440263d36)
 - 2023
   - [🔮 Become a Better Engineer, Step 1: Awareness](https://blog.canellariccardo.it/become-a-better-engineer-step-1-awareness-872814a4e0c0)
 - 2022
