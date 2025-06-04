@@ -30,6 +30,8 @@
 
 ## What i write:
 
+- 2025
+  - [🔮 Why finding a new job as an engineer is becoming so boring](https://blog.canellariccardo.it/why-finding-a-new-job-as-an-engineer-is-becoming-so-boring-1726936be2ba?sk=0a95a50f292b39d326229f30520e5b75)
 - 2024
   - [🔮 Become a Better Engineer, Step 2: Connect the dots](https://medium.com/@riccardocanella/become-a-better-engineer-step-2-connect-the-dots-e43f234fedba)
   - [👨‍💻 Demystifying Shader Components in Web Development](https://blog.canellariccardo.it/demystifying-shader-components-in-web-development-3cf440263d36)
