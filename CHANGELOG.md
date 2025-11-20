@@ -1,5 +1,12 @@
 # thecreazy
 
+## 1.7.0
+
+### Minor Changes
+
+- 31dc95e: added new 2025 blog post
+- 6b7e81a: added new blogpost
+
 ## 1.6.0
 
 ### Minor Changes
