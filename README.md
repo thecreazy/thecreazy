@@ -1,8 +1,8 @@
 # Riccardo Canella
 
-### From Italy living in Italy 🤌, where I work as a Lead Frontend Engineer at Jobtome.com/Hirematic. With a fullstack javascript background, my strength lies in websites and apps. If you want to know more about me, my work or if youʼre a head hunter who wants to offer me a lot of money, feel free to contact me on canella_riccardo[at]icloud.com.
+### From Italy living in Italy 🤌, where I work as a Product Enginering Lead at Hirematic. With a fullstack javascript background, my strength lies in websites and apps. If you want to know more about me, my work or if youʼre a head hunter who wants to offer me a lot of money, feel free to contact me on canella_riccardo[at]icloud.com.
 
-- 👷 I’m currently doing frontend stuffs in [Hirematic](https://hirematic.com)
+- 👷 I’m currently doing magic stuffs in [Hirematic](https://hirematic.com)
 - 🖊️ Sometimes I write on my medium blog: [blog.canellariccardo.it](https://thecreazy.link/blog)
 - 📚 I’m currently learning ![Go](https://img.shields.io/badge/-Go-black?style=flat&logo=go)
 - 💬 Talking about me, I'm a huge fan of basketball and Photography.
@@ -40,7 +40,8 @@
   - [🔮 Become a Better Engineer, Step 1: Awareness](https://blog.canellariccardo.it/become-a-better-engineer-step-1-awareness-872814a4e0c0)
 - 2022
   - [👨‍💻 PNPM: Because to work more flexible we start from the bottom](https://medium.com/jobtome-engineering/pnpm-because-to-work-more-flexible-we-start-from-the-bottom-5a9c3a9c2af4)
-  - [👨‍💻](https://medium.com/javascript-by-doing/learn-bubble-sort-in-javascript-7692aae65666) [What is the mood of the Italian music released during the first three months of this year?](https://blog.canellariccardo.it/what-is-the-mood-of-the-italian-music-released-during-the-first-three-months-of-this-year-51b1f83acd)
+  - [👨‍💻 Bubble sort in javascript](https://medium.com/javascript-by-doing/learn-bubble-sort-in-javascript-7692aae65666) 
+  - [👨‍💻 What is the mood of the Italian music released during the first three months of this year?](https://blog.canellariccardo.it/what-is-the-mood-of-the-italian-music-released-during-the-first-three-months-of-this-year-51b1f83acd)
   - [🔮 Can i be just myself ?](https://blog.canellariccardo.it/can-i-be-just-myself-7bd7ecfb52c6)
   - [👨‍💻 Bubble Sort in Javascript](https://medium.com/javascript-by-doing/learn-bubble-sort-in-javascript-7692aae65666)
 - 2021
@@ -72,7 +73,7 @@
 
 ## My cv:
 
-- [Jobtome/Hirematic](https://www.linkedin.com/company/hirematic/) Lead Frontend Engineer (2022/Mar - present)
+- [Hirematic](https://www.linkedin.com/company/hirematic/) Product Engineering Lead (2022/Mar - present)
 - [Lastminte.com](https://www.linkedin.com/company/lastminute.com/) Senior Frontend Engineer - Hotel area (2019/Dec - 2022/Feb)
 - [Jobtome.com](https://www.linkedin.com/company/jobtome-com/) Senior Frontend Engineer (2018/Nov - 2019/Nov)
 - [Caffeina](https://caffeina.com) Frontend Developer (2017/Jun - 2018/Oct)

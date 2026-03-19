@@ -1,0 +1,518 @@
+---
+interface Props {
+  raw: string
+}
+const { raw } = Astro.props
+---
+
+<!-- Dev Mode trigger hint (top-left) -->
+<button
+  id="devmode-trigger"
+  class="devmode-trigger font-pixel"
+  aria-label="Open dev mode (Ctrl+Shift+D)"
+  title="Dev mode: Ctrl+Shift+D"
+>
+  <span>&gt;_</span>
+</button>
+
+<!-- Dev Mode Panel -->
+<div id="devmode-panel" class="devmode-panel" role="dialog" aria-label="Dev Mode" aria-hidden="true">
+  <div class="panel-header">
+    <span class="font-pixel panel-title">
+      <span style="color:var(--color-accent)">DEV_MODE</span>
+      <span class="blink font-terminal" style="color:var(--color-dim)">█</span>
+    </span>
+    <div class="panel-tabs font-pixel" role="tablist">
+      <button class="tab active" data-tab="source" role="tab">SOURCE</button>
+      <button class="tab" data-tab="perf"   role="tab">PERF</button>
+      <button class="tab" data-tab="theme"  role="tab">THEME</button>
+      <button class="tab" data-tab="matrix" role="tab">MATRIX</button>
+    </div>
+    <button id="devmode-close" class="close-btn font-pixel" aria-label="Close">✕</button>
+  </div>
+
+  <!-- SOURCE tab -->
+  <div class="tab-content active" data-panel="source">
+    <pre class="source-pre font-mono" id="source-content"><code>{raw}</code></pre>
+  </div>
+
+  <!-- PERF tab -->
+  <div class="tab-content" data-panel="perf">
+    <div class="perf-grid font-mono" id="perf-content">
+      <div class="perf-item">
+        <span class="perf-label font-pixel">FPS</span>
+        <span class="perf-value" id="fps-counter">--</span>
+      </div>
+      <div class="perf-item">
+        <span class="perf-label font-pixel">LCP</span>
+        <span class="perf-value" id="lcp-value">--</span>
+      </div>
+      <div class="perf-item">
+        <span class="perf-label font-pixel">MEMORY</span>
+        <span class="perf-value" id="mem-value">--</span>
+      </div>
+      <div class="perf-item">
+        <span class="perf-label font-pixel">WEBGL</span>
+        <span class="perf-value" id="webgl-status">--</span>
+      </div>
+      <div class="perf-item">
+        <span class="perf-label font-pixel">THEME</span>
+        <span class="perf-value" id="current-theme">--</span>
+      </div>
+      <div class="perf-item">
+        <span class="perf-label font-pixel">VERSION</span>
+        <span class="perf-value">v1.7.0</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- THEME tab -->
+  <div class="tab-content" data-panel="theme">
+    <div class="theme-editor font-mono" id="theme-editor">
+      <!-- populated by JS -->
+    </div>
+  </div>
+
+  <!-- MATRIX tab -->
+  <div class="tab-content" data-panel="matrix">
+    <canvas id="matrix-canvas" class="matrix-canvas" aria-hidden="true"></canvas>
+    <div class="matrix-overlay font-pixel">
+      <span style="color:var(--color-accent)">WAKE UP, NEO...</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ── trigger ── */
+  .devmode-trigger {
+    position: fixed;
+    top: 24px;
+    left: 24px;
+    z-index: 200;
+    font-size: 10px;
+    color: var(--color-dim);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    padding: 10px 14px;
+    cursor: none;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .devmode-trigger:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    box-shadow: 0 0 8px var(--color-glow);
+  }
+
+  /* ── panel ── */
+  .devmode-panel {
+    position: fixed;
+    inset: 0;
+    z-index: 500;
+    background: color-mix(in srgb, var(--color-bg) 97%, transparent);
+    backdrop-filter: blur(4px);
+    color: var(--color-text);
+    display: flex;
+    flex-direction: column;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border-top: 2px solid var(--color-accent);
+    box-shadow: 0 -4px 40px var(--color-glow);
+  }
+
+  .devmode-panel.open {
+    transform: translateY(0);
+  }
+
+  /* ── header ── */
+  .panel-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    grid-template-rows: auto auto;
+    gap: 12px 16px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--color-border);
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  .panel-title {
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .close-btn {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .panel-tabs {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .blink {
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0; }
+  }
+
+  .panel-tabs {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .tab {
+    font-size: 8px;
+    color: var(--color-dim);
+    background: transparent;
+    border: 1px solid transparent;
+    padding: 6px 12px;
+    cursor: none;
+    transition: color 0.2s, border-color 0.2s;
+  }
+
+  .tab:hover,
+  .tab.active {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .close-btn {
+    font-size: 8px;
+    color: var(--color-dim);
+    background: transparent;
+    border: 1px solid var(--color-border);
+    padding: 6px 10px;
+    cursor: none;
+    transition: color 0.2s;
+  }
+
+  .close-btn:hover {
+    color: var(--color-accent);
+  }
+
+  /* ── tab content ── */
+  .tab-content {
+    display: none;
+    flex: 1;
+    overflow: hidden;
+  }
+
+  .tab-content.active {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* SOURCE */
+  .source-pre {
+    flex: 1;
+    overflow: auto;
+    padding: 24px;
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--color-dim);
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  .source-pre code {
+    color: var(--color-text);
+  }
+
+  /* PERF */
+  .perf-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 2px;
+    padding: 24px;
+  }
+
+  .perf-item {
+    border: 1px solid var(--color-border);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .perf-label {
+    font-size: 8px;
+    color: var(--color-dim);
+  }
+
+  .perf-value {
+    font-size: 32px;
+    color: var(--color-accent);
+    font-family: 'VT323', monospace;
+    line-height: 1;
+  }
+
+  /* THEME */
+  .theme-editor {
+    flex: 1;
+    overflow: auto;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  /* MATRIX */
+  .tab-content[data-panel="matrix"] {
+    position: relative;
+  }
+
+  .matrix-canvas {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .matrix-overlay {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    text-align: center;
+    pointer-events: none;
+    text-shadow: 0 0 20px var(--color-glow);
+  }
+
+  /* ── mobile ── */
+  @media (max-width: 600px) {
+    .devmode-trigger,
+    .tab,
+    .close-btn {
+      cursor: pointer; /* touch devices don't have custom cursor */
+    }
+
+    .panel-header {
+      padding: 12px;
+      gap: 10px 12px;
+    }
+
+    .panel-title {
+      font-size: 9px;
+    }
+
+    .tab {
+      font-size: 7px;
+      padding: 6px 8px;
+    }
+
+    .close-btn {
+      padding: 8px 12px;
+      font-size: 12px; /* bigger tap target */
+    }
+
+    .source-pre {
+      padding: 12px;
+      font-size: 11px;
+    }
+
+    .perf-grid {
+      padding: 12px;
+      grid-template-columns: repeat(2, 1fr);
+    }
+
+    .theme-editor {
+      padding: 12px;
+    }
+  }
+</style>
+
+<script is:inline>
+;(function () {
+  const panel   = document.getElementById('devmode-panel')
+  const trigger = document.getElementById('devmode-trigger')
+  const closeBtn= document.getElementById('devmode-close')
+  const tabs    = document.querySelectorAll('.tab')
+  const panels  = document.querySelectorAll('.tab-content')
+
+  let open       = false
+  let matrixRAF  = null
+  let fpsRAF     = null
+  let lastTime   = performance.now()
+  let frames     = 0
+
+  // ── open / close ──────────────────────────────────────────────────────────
+  function openPanel() {
+    open = true
+    panel.classList.add('open')
+    panel.setAttribute('aria-hidden', 'false')
+    startFPS()
+    populateThemeEditor()
+  }
+
+  function closePanel() {
+    open = false
+    panel.classList.remove('open')
+    panel.setAttribute('aria-hidden', 'true')
+    stopMatrix()
+    stopFPS()
+  }
+
+  trigger.addEventListener('click', () => open ? closePanel() : openPanel())
+  closeBtn.addEventListener('click', closePanel)
+
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.shiftKey && e.key === 'D') { e.preventDefault(); open ? closePanel() : openPanel() }
+    if (e.key === 'Escape' && open) closePanel()
+  })
+
+  // ── tabs ──────────────────────────────────────────────────────────────────
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab
+      tabs.forEach((t) => t.classList.toggle('active', t.dataset.tab === target))
+      panels.forEach((p) => p.classList.toggle('active', p.dataset.panel === target))
+      if (target === 'matrix') startMatrix()
+      else stopMatrix()
+      if (target === 'perf') startFPS()
+    })
+  })
+
+  // ── FPS counter ───────────────────────────────────────────────────────────
+  function startFPS() {
+    const el = document.getElementById('fps-counter')
+    if (!el) return
+
+    function tick(now) {
+      frames++
+      if (now - lastTime >= 1000) {
+        el.textContent = frames + ' fps'
+        frames = 0
+        lastTime = now
+
+        // extras
+        const mem = performance.memory
+        if (mem) {
+          document.getElementById('mem-value').textContent =
+            Math.round(mem.usedJSHeapSize / 1048576) + ' MB'
+        }
+        document.getElementById('current-theme').textContent =
+          document.documentElement.getAttribute('data-theme') ?? '?'
+        document.getElementById('webgl-status').textContent =
+          document.getElementById('webgl-canvas')?.tagName ? 'active' : 'off'
+      }
+      fpsRAF = requestAnimationFrame(tick)
+    }
+
+    fpsRAF = requestAnimationFrame(tick)
+  }
+
+  function stopFPS() {
+    if (fpsRAF) cancelAnimationFrame(fpsRAF)
+  }
+
+  // ── LCP via PerformanceObserver ────────────────────────────────────────────
+  if (typeof PerformanceObserver !== 'undefined') {
+    try {
+      new PerformanceObserver((list) => {
+        const entries = list.getEntries()
+        const last = entries[entries.length - 1]
+        const el = document.getElementById('lcp-value')
+        if (el) el.textContent = Math.round(last.startTime) + ' ms'
+      }).observe({ type: 'largest-contentful-paint', buffered: true })
+    } catch (_) {}
+  }
+
+  // ── Theme editor ──────────────────────────────────────────────────────────
+  function populateThemeEditor() {
+    const editor = document.getElementById('theme-editor')
+    if (!editor || editor.children.length > 0) return
+
+    const vars = [
+      '--color-bg', '--color-surface', '--color-border',
+      '--color-accent', '--color-accent2', '--color-text', '--color-dim',
+    ]
+
+    const root = document.documentElement
+
+    vars.forEach((v) => {
+      const val = getComputedStyle(root).getPropertyValue(v).trim()
+      const row = document.createElement('div')
+      row.style.cssText = 'display:flex;align-items:center;gap:16px;padding:8px 0;border-bottom:1px solid var(--color-border)'
+
+      const swatch = document.createElement('input')
+      swatch.type  = 'color'
+      swatch.value = val.startsWith('#') ? val : '#888888'
+      swatch.style.cssText = 'width:32px;height:32px;border:none;background:none;cursor:none;padding:0'
+      swatch.addEventListener('input', () => {
+        root.style.setProperty(v, swatch.value)
+      })
+
+      const name = document.createElement('span')
+      name.textContent = v
+      name.style.cssText = 'font-size:11px;color:var(--color-dim);flex:1;font-family:"IBM Plex Mono",monospace'
+
+      const current = document.createElement('span')
+      current.textContent = val
+      current.style.cssText = 'font-size:11px;color:var(--color-accent);font-family:"IBM Plex Mono",monospace'
+
+      row.appendChild(swatch)
+      row.appendChild(name)
+      row.appendChild(current)
+      editor.appendChild(row)
+    })
+  }
+
+  // ── Matrix rain ───────────────────────────────────────────────────────────
+  function startMatrix() {
+    const canvas = document.getElementById('matrix-canvas')
+    if (!canvas) return
+    const ctx    = canvas.getContext('2d')
+
+    canvas.width  = canvas.offsetWidth
+    canvas.height = canvas.offsetHeight
+
+    const cols   = Math.floor(canvas.width / 16)
+    const drops  = Array(cols).fill(1)
+    const chars  = '01アウエオカキクケコサシスセソタチツテトナニヌネノABCDEF<>{}[]|/'
+
+    function getMatrixColors() {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+      return {
+        trail: isDark ? 'rgba(10,10,10,0.05)'    : 'rgba(247,247,247,0.07)',
+        char:  isDark ? '#55a566'                 : '#01470f',
+        head:  isDark ? '#b6a8db'                 : '#5b21b6',
+      }
+    }
+
+    function draw() {
+      const { trail, char, head } = getMatrixColors()
+
+      ctx.fillStyle = trail
+      ctx.fillRect(0, 0, canvas.width, canvas.height)
+      ctx.font = '14px "IBM Plex Mono"'
+
+      drops.forEach((y, i) => {
+        const glyph = chars[Math.floor(Math.random() * chars.length)]
+        // brightest char at the head of the drop
+        ctx.fillStyle = y === 1 ? head : char
+        ctx.fillText(glyph, i * 16, y * 16)
+        if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0
+        drops[i]++
+      })
+
+      matrixRAF = requestAnimationFrame(draw)
+    }
+
+    draw()
+  }
+
+  function stopMatrix() {
+    if (matrixRAF) { cancelAnimationFrame(matrixRAF); matrixRAF = null }
+  }
+})()
+</script>
