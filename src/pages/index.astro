@@ -58,6 +58,13 @@ const data = parseReadme(raw)
     background: var(--color-border);
     display: block;
     transition: background 0.2s, transform 0.2s;
+    position: relative;
+  }
+
+  .nav-dot::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
   }
 
   .nav-dot:hover,

@@ -6,5 +6,8 @@ export default defineConfig({
   output: 'static',
   vite: {
     assetsInclude: ['**/*.glsl'],
+    build: {
+      target: 'es2020',
+    },
   },
 })

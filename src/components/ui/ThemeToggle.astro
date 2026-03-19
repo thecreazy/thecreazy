@@ -32,6 +32,7 @@
   function updateUI(theme) {
     icon.textContent  = theme === 'dark' ? '◑' : '◐'
     label.textContent = theme
+    toggle.setAttribute('aria-label', 'Switch to ' + (theme === 'dark' ? 'light' : 'dark') + ' mode')
   }
 </script>
 
@@ -44,7 +45,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-    font-size: 8px;
+    font-size: 12px;
     color: var(--color-text);
     background: var(--color-surface);
     border: 1px solid var(--color-border);
