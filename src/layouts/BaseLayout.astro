@@ -108,5 +108,32 @@ const {
       )
       document.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
     </script>
+
+    <!-- Konami code → manga mode easter egg (pure inline, zero bundle cost) -->
+    <script>
+      import('../scripts/mangaMode.ts').then(() => {})  // pre-warm the chunk after load
+
+      const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown',
+                       'ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a']
+      let idx    = 0
+      let active = false
+      let busy   = false
+
+      document.addEventListener('keydown', async (e) => {
+        if (e.key !== KONAMI[idx]) { idx = 0; return }
+        idx++
+        if (idx < KONAMI.length) return
+        idx = 0
+
+        if (busy) return
+        busy = true
+
+        const { activate, deactivate } = await import('../scripts/mangaMode.ts')
+        if (active) { deactivate(); active = false }
+        else        { await activate(); active = true }
+
+        busy = false
+      })
+    </script>
   </body>
 </html>

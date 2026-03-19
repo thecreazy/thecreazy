@@ -10,10 +10,15 @@
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "version": "npx changeset version && npx changeset tag",
+    "changeset": "npx changeset",
     "commit": "git add . && npx changeset add",
     "release": "npx changeset publish"
   },
-  "keywords": ["thecreazy", "portfolio", "personal site"],
+  "keywords": [
+    "thecreazy",
+    "portfolio",
+    "personal site"
+  ],
   "author": "@thecreazy <canella_riccardo@icloud.com>",
   "license": "ISC",
   "dependencies": {
