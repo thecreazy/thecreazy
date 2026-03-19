@@ -71,6 +71,17 @@ const {
       })
       document.addEventListener('mouseleave', () => { cursor.style.opacity = '0' })
       document.addEventListener('mouseenter', () => { cursor.style.opacity = '1' })
+
+      document.addEventListener('mouseover', (e) => {
+        if (e.target.closest('a, button, [role="button"]')) {
+          cursor.classList.add('is-hovering')
+        }
+      })
+      document.addEventListener('mouseout', (e) => {
+        if (e.target.closest('a, button, [role="button"]')) {
+          cursor.classList.remove('is-hovering')
+        }
+      })
     </script>
 
     <!-- WebGL loader (fully async, non-blocking) -->

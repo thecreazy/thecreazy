@@ -54,6 +54,10 @@ body {
   overflow-x: hidden;
 }
 
+a, button, [role="button"], label, select, input, textarea {
+  cursor: none;
+}
+
 /* ─── custom cursor ────────────────────────────────────────────────────────── */
 
 .cursor {
@@ -79,6 +83,21 @@ body {
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50%       { opacity: 0; }
+}
+
+.cursor.is-hovering {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px solid var(--cursor-color);
+  mix-blend-mode: normal;
+  transition: width 0.15s ease, height 0.15s ease, border-radius 0.15s ease, background 0.15s ease;
+}
+
+.cursor.is-hovering::after {
+  animation: none;
+  opacity: 1;
 }
 
 /* ─── WebGL canvas ─────────────────────────────────────────────────────────── */
