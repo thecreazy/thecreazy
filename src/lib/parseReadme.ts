@@ -2,12 +2,6 @@ import type { ReadmeData, HeroData, SocialLink, Project, BlogPost, CVEntry } fro
 
 // ─── helpers ──────────────────────────────────────────────────────────────────
 
-function extractLink(text: string): { label: string; url: string } | null {
-  const m = text.match(/\[([^\]]+)\]\(([^)]+)\)/)
-  if (!m) return null
-  return { label: m[1].trim(), url: m[2].trim() }
-}
-
 function stripEmoji(text: string): string {
   return text
     .replace(/[\u{1F300}-\u{1FFFF}]/gu, '')

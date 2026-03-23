@@ -366,7 +366,7 @@ const { raw } = Astro.props
   closeBtn.addEventListener('click', closePanel)
 
   document.addEventListener('keydown', (e) => {
-    if (e.ctrlKey && e.shiftKey && e.key === 'D') { e.preventDefault(); open ? closePanel() : openPanel() }
+    if (e.ctrlKey && e.shiftKey && e.key === 'D') { e.preventDefault(); if (open) closePanel(); else openPanel() }
     if (e.key === 'Escape' && open) closePanel()
   })
 
@@ -424,7 +424,7 @@ const { raw } = Astro.props
         const el = document.getElementById('lcp-value')
         if (el) el.textContent = Math.round(last.startTime) + ' ms'
       }).observe({ type: 'largest-contentful-paint', buffered: true })
-    } catch (_) {}
+    } catch { /* PerformanceObserver not supported */ }
   }
 
   // ── Theme editor ──────────────────────────────────────────────────────────

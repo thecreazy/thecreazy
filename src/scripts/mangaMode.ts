@@ -259,7 +259,7 @@ function makeJaggedSVG(text: string, w: number, h: number, fontSize: number): st
   for (let x = pad; x < w - pad; x += jag * 2) top += `L${x + jag},0 L${x + jag * 2},${jag} `
 
   // right side
-  let right = `L${w - pad},${bodyH} `
+  const right = `L${w - pad},${bodyH} `
 
   // zigzag bottom
   let bot = ''
@@ -282,9 +282,6 @@ function makeJaggedSVG(text: string, w: number, h: number, fontSize: number): st
       font-family="'Press Start 2P', monospace"
       font-size="${fontSize}" fill="#000" font-weight="bold">${l}</text>`
   }).join('')
-
-  // tail pointing down-left
-  const tailPath = `M${cx - 20},${bodyH} L${20},${h} L${cx + 20},${bodyH}Z`
 
   return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" overflow="visible">
   <path d="${jagPath}" fill="white" stroke="black" stroke-width="3.5" stroke-linejoin="round"/>

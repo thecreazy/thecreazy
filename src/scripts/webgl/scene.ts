@@ -93,7 +93,6 @@ function hexToVec3(hex: string): THREE.Vector3 {
 }
 
 function getThemeColors(): { accent: THREE.Vector3; bg: THREE.Vector3; dark: number } {
-  const style = getComputedStyle(document.documentElement)
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
 
   const accentHex = isDark ? '#b6a8db' : '#01470f'
