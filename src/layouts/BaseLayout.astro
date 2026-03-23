@@ -96,14 +96,14 @@ const {
       })
     </script>
 
-    <!-- WebGL loader (fully async, non-blocking) -->
+    <!-- WebGL loader (fully async, non-blocking, separate chunk) -->
     <script>
-      import { WebGLScene } from '../scripts/webgl/scene.ts'
-
       async function initWebGL() {
         try {
           const canvas = document.getElementById('webgl-canvas') as HTMLCanvasElement
-          if (canvas) new WebGLScene(canvas)
+          if (!canvas) return
+          const { WebGLScene } = await import('../scripts/webgl/scene.ts')
+          new WebGLScene(canvas)
         } catch (e) {
           // WebGL not available, site works fine without it
           console.warn('WebGL not available:', e)
