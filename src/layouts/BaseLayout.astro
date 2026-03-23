@@ -34,8 +34,18 @@ const {
     <!-- Fonts (non-render-blocking) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=optional" media="print" onload="this.media='all'" />
-    <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=optional" /></noscript>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=optional"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript
+      ><link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=optional"
+      /></noscript
+    >
 
     <!-- Favicons -->
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
@@ -49,7 +59,9 @@ const {
     <script is:inline>
       window.dataLayer = window.dataLayer || []
       // eslint-disable-next-line prefer-rest-params
-      function gtag() { dataLayer.push(arguments) }
+      function gtag() {
+        dataLayer.push(arguments)
+      }
       gtag('js', new Date())
       gtag('config', 'G-QEZ5WE0ZJR')
     </script>
@@ -74,15 +86,20 @@ const {
     <!-- Cursor script (inline, tiny) -->
     <script is:inline>
       const cursor = document.getElementById('cursor')
-      let mx = -100, my = -100
+      let mx = -100,
+        my = -100
       document.addEventListener('mousemove', (e) => {
         mx = e.clientX
         my = e.clientY
         cursor.style.left = mx + 'px'
-        cursor.style.top  = my + 'px'
+        cursor.style.top = my + 'px'
       })
-      document.addEventListener('mouseleave', () => { cursor.style.opacity = '0' })
-      document.addEventListener('mouseenter', () => { cursor.style.opacity = '1' })
+      document.addEventListener('mouseleave', () => {
+        cursor.style.opacity = '0'
+      })
+      document.addEventListener('mouseenter', () => {
+        cursor.style.opacity = '1'
+      })
 
       document.addEventListener('mouseover', (e) => {
         if (e.target.closest('a, button, [role="button"]')) {
@@ -121,12 +138,13 @@ const {
     <!-- Section reveal on scroll -->
     <script is:inline>
       const observer = new IntersectionObserver(
-        (entries) => entries.forEach((e) => {
-          if (e.isIntersecting) {
-            e.target.classList.add('visible')
-            observer.unobserve(e.target)
-          }
-        }),
+        (entries) =>
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible')
+              observer.unobserve(e.target)
+            }
+          }),
         { threshold: 0.1 }
       )
       document.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
@@ -134,16 +152,29 @@ const {
 
     <!-- Konami code → manga mode easter egg (pure inline, zero bundle cost) -->
     <script>
-      import('../scripts/mangaMode.ts').then(() => {})  // pre-warm the chunk after load
+      import('../scripts/mangaMode.ts').then(() => {}) // pre-warm the chunk after load
 
-      const KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown',
-                       'ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a']
-      let idx    = 0
+      const KONAMI = [
+        'ArrowUp',
+        'ArrowUp',
+        'ArrowDown',
+        'ArrowDown',
+        'ArrowLeft',
+        'ArrowRight',
+        'ArrowLeft',
+        'ArrowRight',
+        'b',
+        'a',
+      ]
+      let idx = 0
       let active = false
-      let busy   = false
+      let busy = false
 
       document.addEventListener('keydown', async (e) => {
-        if (e.key !== KONAMI[idx]) { idx = 0; return }
+        if (e.key !== KONAMI[idx]) {
+          idx = 0
+          return
+        }
         idx++
         if (idx < KONAMI.length) return
         idx = 0
@@ -152,8 +183,13 @@ const {
         busy = true
 
         const { activate, deactivate } = await import('../scripts/mangaMode.ts')
-        if (active) { deactivate(); active = false }
-        else        { await activate(); active = true }
+        if (active) {
+          deactivate()
+          active = false
+        } else {
+          await activate()
+          active = true
+        }
 
         busy = false
       })

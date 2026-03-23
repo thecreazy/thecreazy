@@ -15,23 +15,29 @@ const { projects } = Astro.props
   </header>
 
   <div class="projects-grid">
-    {projects.map((p, i) => (
-      <a
-        href={p.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="project-card reveal"
-        style={`transition-delay: ${i * 60}ms`}
-        aria-label={`${p.name}: ${p.description}`}
-      >
-        <div class="card-index font-terminal">{String(i + 1).padStart(2, '0')}</div>
-        <div class="card-content">
-          <h3 class="card-name font-pixel glitch" data-text={p.name}>{p.name}</h3>
-          <p class="card-desc font-mono">{p.description}</p>
-        </div>
-        <div class="card-arrow font-terminal" aria-hidden="true">→</div>
-      </a>
-    ))}
+    {
+      projects.map((p, i) => (
+        <a
+          href={p.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="project-card reveal"
+          style={`transition-delay: ${i * 60}ms`}
+          aria-label={`${p.name}: ${p.description}`}
+        >
+          <div class="card-index font-terminal">{String(i + 1).padStart(2, '0')}</div>
+          <div class="card-content">
+            <h3 class="card-name font-pixel glitch" data-text={p.name}>
+              {p.name}
+            </h3>
+            <p class="card-desc font-mono">{p.description}</p>
+          </div>
+          <div class="card-arrow font-terminal" aria-hidden="true">
+            →
+          </div>
+        </a>
+      ))
+    }
   </div>
 </section>
 
@@ -75,12 +81,16 @@ const { projects } = Astro.props
     margin: -1px 0 0 -1px;
     text-decoration: none;
     color: var(--color-text);
-    transition: border-color 0.2s, box-shadow 0.2s;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s;
   }
 
   .project-card:hover {
     border-color: var(--color-accent);
-    box-shadow: inset 0 0 20px rgba(0,0,0,0.1), 0 0 20px var(--color-glow);
+    box-shadow:
+      inset 0 0 20px rgba(0, 0, 0, 0.1),
+      0 0 20px var(--color-glow);
     z-index: 1;
     opacity: 1;
   }
@@ -107,7 +117,9 @@ const { projects } = Astro.props
   .card-arrow {
     font-size: 24px;
     color: var(--color-dim);
-    transition: color 0.2s, transform 0.2s;
+    transition:
+      color 0.2s,
+      transform 0.2s;
     padding-top: 4px;
   }
 

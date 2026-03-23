@@ -8,7 +8,7 @@ import * as THREE from 'three'
 
 // Import the GLSL shader as a string (Vite handles this via ?raw)
 // We inline it here to avoid an extra fetch (the shader is small).
-const NOISE_FRAG = /* glsl */`
+const NOISE_FRAG = /* glsl */ `
 uniform float uTime;
 uniform vec2  uResolution;
 uniform vec3  uColorA;
@@ -77,7 +77,7 @@ void main(){
 }
 `
 
-const VERT = /* glsl */`
+const VERT = /* glsl */ `
 varying vec2 vUv;
 void main(){
   vUv=uv;
@@ -96,22 +96,22 @@ function getThemeColors(): { accent: THREE.Vector3; bg: THREE.Vector3; dark: num
   const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
 
   const accentHex = isDark ? '#b6a8db' : '#01470f'
-  const bgHex     = isDark ? '#0a0a0a' : '#f7f7f7'
+  const bgHex = isDark ? '#0a0a0a' : '#f7f7f7'
 
   return {
     accent: hexToVec3(accentHex),
-    bg:     hexToVec3(bgHex),
-    dark:   isDark ? 1.0 : 0.0,
+    bg: hexToVec3(bgHex),
+    dark: isDark ? 1.0 : 0.0,
   }
 }
 
 export class WebGLScene {
   private renderer: THREE.WebGLRenderer
-  private scene:    THREE.Scene
-  private camera:   THREE.OrthographicCamera
+  private scene: THREE.Scene
+  private camera: THREE.OrthographicCamera
   private material: THREE.ShaderMaterial
-  private raf:      number = 0
-  private start:    number = performance.now()
+  private raf: number = 0
+  private start: number = performance.now()
 
   constructor(canvas: HTMLCanvasElement) {
     this.renderer = new THREE.WebGLRenderer({ canvas, alpha: false, antialias: false })
@@ -119,23 +119,23 @@ export class WebGLScene {
     this.renderer.setSize(window.innerWidth, window.innerHeight)
 
     this.camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
-    this.scene  = new THREE.Scene()
+    this.scene = new THREE.Scene()
 
     const { accent, bg, dark } = getThemeColors()
 
     this.material = new THREE.ShaderMaterial({
-      vertexShader:   VERT,
+      vertexShader: VERT,
       fragmentShader: NOISE_FRAG,
       uniforms: {
-        uTime:       { value: 0 },
+        uTime: { value: 0 },
         uResolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) },
-        uColorA:     { value: accent },
-        uColorBg:    { value: bg },
-        uDark:       { value: dark },
+        uColorA: { value: accent },
+        uColorBg: { value: bg },
+        uDark: { value: dark },
       },
     })
 
-    const geo  = new THREE.PlaneGeometry(2, 2)
+    const geo = new THREE.PlaneGeometry(2, 2)
     const mesh = new THREE.Mesh(geo, this.material)
     this.scene.add(mesh)
 
@@ -155,9 +155,9 @@ export class WebGLScene {
     // Update colors on theme change
     const observer = new MutationObserver(() => {
       const { accent, bg, dark } = getThemeColors()
-      this.material.uniforms.uColorA.value  = accent
+      this.material.uniforms.uColorA.value = accent
       this.material.uniforms.uColorBg.value = bg
-      this.material.uniforms.uDark.value    = dark
+      this.material.uniforms.uDark.value = dark
     })
     observer.observe(document.documentElement, {
       attributes: true,

@@ -7,7 +7,7 @@ import { resolve } from 'path'
 export const prerender = true
 
 const fontRegular = readFileSync(resolve('./public/font.woff'))
-const fontTitle   = readFileSync(resolve('./public/title.woff'))
+const fontTitle = readFileSync(resolve('./public/title.woff'))
 
 export const GET: APIRoute = async () => {
   const svg = await satori(
@@ -103,17 +103,17 @@ export const GET: APIRoute = async () => {
       },
     },
     {
-      width:  1200,
+      width: 1200,
       height: 630,
       fonts: [
-        { name: 'mono',  data: fontRegular, weight: 400 },
-        { name: 'title', data: fontTitle,   weight: 700 },
+        { name: 'mono', data: fontRegular, weight: 400 },
+        { name: 'title', data: fontTitle, weight: 700 },
       ],
-    },
+    }
   )
 
   const resvg = new Resvg(svg, { fitTo: { mode: 'width', value: 1200 } })
-  const png   = resvg.render().asPng()
+  const png = resvg.render().asPng()
 
   return new Response(png, {
     headers: { 'Content-Type': 'image/png' },

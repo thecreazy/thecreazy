@@ -37,5 +37,5 @@ export default tseslint.config(
       // Astro uses inline scripts — allow console.warn/error
       'no-console': ['warn', { allow: ['warn', 'error'] }],
     },
-  },
+  }
 )

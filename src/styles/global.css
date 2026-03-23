@@ -1,36 +1,37 @@
-
 /* ─── CSS custom properties ───────────────────────────────────────────────── */
 
 :root {
   /* light theme (default) */
-  --color-bg:       #f7f7f7;
-  --color-surface:  #ffffff;
-  --color-border:   #d0d0d0;
-  --color-accent:   #01470f;
-  --color-accent2:  #5b21b6;
-  --color-text:     #1a1a1a;
-  --color-dim:      #666666;
-  --color-glow:     rgba(1, 71, 15, 0.4);
+  --color-bg: #f7f7f7;
+  --color-surface: #ffffff;
+  --color-border: #d0d0d0;
+  --color-accent: #01470f;
+  --color-accent2: #5b21b6;
+  --color-text: #1a1a1a;
+  --color-dim: #666666;
+  --color-glow: rgba(1, 71, 15, 0.4);
   --scanline-color: rgba(0, 0, 0, 0.04);
-  --cursor-color:   #01470f;
+  --cursor-color: #01470f;
 }
 
 [data-theme='dark'] {
-  --color-bg:       #0a0a0a;
-  --color-surface:  #111111;
-  --color-border:   #2a2a2a;
-  --color-accent:   #b6a8db;
-  --color-accent2:  #55a566;
-  --color-text:     #e8e8e8;
-  --color-dim:      #999999;
-  --color-glow:     rgba(182, 168, 219, 0.5);
+  --color-bg: #0a0a0a;
+  --color-surface: #111111;
+  --color-border: #2a2a2a;
+  --color-accent: #b6a8db;
+  --color-accent2: #55a566;
+  --color-text: #e8e8e8;
+  --color-dim: #999999;
+  --color-glow: rgba(182, 168, 219, 0.5);
   --scanline-color: rgba(255, 255, 255, 0.03);
-  --cursor-color:   #b6a8db;
+  --cursor-color: #b6a8db;
 }
 
 /* ─── reset ────────────────────────────────────────────────────────────────── */
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -48,12 +49,20 @@ body {
   font-family: 'IBM Plex Mono', monospace;
   font-size: 16px;
   line-height: 1.7;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  transition:
+    background-color 0.3s ease,
+    color 0.3s ease;
   cursor: none;
   overflow-x: hidden;
 }
 
-a, button, [role="button"], label, select, input, textarea {
+a,
+button,
+[role='button'],
+label,
+select,
+input,
+textarea {
   cursor: none;
 }
 
@@ -80,8 +89,13 @@ a, button, [role="button"], label, select, input, textarea {
 }
 
 @keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0;
+  }
 }
 
 .cursor.is-hovering {
@@ -91,7 +105,11 @@ a, button, [role="button"], label, select, input, textarea {
   background: transparent;
   border: 2px solid var(--cursor-color);
   mix-blend-mode: normal;
-  transition: width 0.15s ease, height 0.15s ease, border-radius 0.15s ease, background 0.15s ease;
+  transition:
+    width 0.15s ease,
+    height 0.15s ease,
+    border-radius 0.15s ease,
+    background 0.15s ease;
 }
 
 .cursor.is-hovering::after {
@@ -136,15 +154,21 @@ a, button, [role="button"], label, select, input, textarea {
 
 /* ─── typography ────────────────────────────────────────────────────────────── */
 
-.font-pixel    { font-family: 'Press Start 2P', monospace; }
-.font-terminal { font-family: 'VT323', monospace; }
-.font-mono     { font-family: 'IBM Plex Mono', monospace; }
+.font-pixel {
+  font-family: 'Press Start 2P', monospace;
+}
+.font-terminal {
+  font-family: 'VT323', monospace;
+}
+.font-mono {
+  font-family: 'IBM Plex Mono', monospace;
+}
 
 /* ─── phosphor glow ─────────────────────────────────────────────────────────── */
 
 .glow {
   text-shadow:
-    0 0 8px  var(--color-glow),
+    0 0 8px var(--color-glow),
     0 0 20px var(--color-glow);
 }
 
@@ -195,21 +219,57 @@ a, button, [role="button"], label, select, input, textarea {
 }
 
 @keyframes glitch-1 {
-  0%   { clip-path: inset(40% 0 61% 0); transform: translate(-2px, -2px); }
-  20%  { clip-path: inset(92% 0  1% 0); transform: translate( 1px,  1px); }
-  40%  { clip-path: inset(43% 0  1% 0); transform: translate(-1px,  2px); }
-  60%  { clip-path: inset(25% 0 58% 0); transform: translate( 2px, -1px); }
-  80%  { clip-path: inset(54% 0  7% 0); transform: translate(-2px,  1px); }
-  100% { clip-path: inset(58% 0 43% 0); transform: translate( 1px, -2px); }
+  0% {
+    clip-path: inset(40% 0 61% 0);
+    transform: translate(-2px, -2px);
+  }
+  20% {
+    clip-path: inset(92% 0 1% 0);
+    transform: translate(1px, 1px);
+  }
+  40% {
+    clip-path: inset(43% 0 1% 0);
+    transform: translate(-1px, 2px);
+  }
+  60% {
+    clip-path: inset(25% 0 58% 0);
+    transform: translate(2px, -1px);
+  }
+  80% {
+    clip-path: inset(54% 0 7% 0);
+    transform: translate(-2px, 1px);
+  }
+  100% {
+    clip-path: inset(58% 0 43% 0);
+    transform: translate(1px, -2px);
+  }
 }
 
 @keyframes glitch-2 {
-  0%   { clip-path: inset(20% 0 50% 0); transform: translate( 2px,  1px); }
-  20%  { clip-path: inset(80% 0 10% 0); transform: translate(-1px, -1px); }
-  40%  { clip-path: inset(10% 0 80% 0); transform: translate( 1px, -2px); }
-  60%  { clip-path: inset(60% 0 20% 0); transform: translate(-2px,  2px); }
-  80%  { clip-path: inset(30% 0 60% 0); transform: translate( 1px, -1px); }
-  100% { clip-path: inset(70% 0 30% 0); transform: translate(-1px,  2px); }
+  0% {
+    clip-path: inset(20% 0 50% 0);
+    transform: translate(2px, 1px);
+  }
+  20% {
+    clip-path: inset(80% 0 10% 0);
+    transform: translate(-1px, -1px);
+  }
+  40% {
+    clip-path: inset(10% 0 80% 0);
+    transform: translate(1px, -2px);
+  }
+  60% {
+    clip-path: inset(60% 0 20% 0);
+    transform: translate(-2px, 2px);
+  }
+  80% {
+    clip-path: inset(30% 0 60% 0);
+    transform: translate(1px, -1px);
+  }
+  100% {
+    clip-path: inset(70% 0 30% 0);
+    transform: translate(-1px, 2px);
+  }
 }
 
 /* ─── section reveal animation ──────────────────────────────────────────────── */
@@ -217,7 +277,9 @@ a, button, [role="button"], label, select, input, textarea {
 .reveal {
   opacity: 0;
   transform: translateY(20px);
-  transition: opacity 0.6s ease, transform 0.6s ease;
+  transition:
+    opacity 0.6s ease,
+    transform 0.6s ease;
 }
 
 .reveal.visible {
@@ -259,7 +321,14 @@ a:hover {
 /* ─── mobile: restore default cursor ───────────────────────────────────────── */
 
 @media (hover: none) and (pointer: coarse) {
-  body  { cursor: auto; }
-  .cursor { display: none; }
-  button, a { cursor: pointer; }
+  body {
+    cursor: auto;
+  }
+  .cursor {
+    display: none;
+  }
+  button,
+  a {
+    cursor: pointer;
+  }
 }

@@ -24,34 +24,38 @@ const years = Object.keys(byYear)
   </header>
 
   <div class="blog-list">
-    {years.map((year) => (
-      <div class="year-group reveal">
-        <div class="year-marker">
-          <span class="year-label font-terminal">{year}</span>
-          <div class="year-line"></div>
-        </div>
+    {
+      years.map((year) => (
+        <div class="year-group reveal">
+          <div class="year-marker">
+            <span class="year-label font-terminal">{year}</span>
+            <div class="year-line" />
+          </div>
 
-        <ul class="posts-list">
-          {byYear[year].map((post, i) => (
-            <li class="post-item" style={`transition-delay: ${i * 40}ms`}>
-              <a
-                href={post.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="post-link"
-                aria-label={post.title}
-              >
-                <span class="post-tag font-terminal" aria-hidden="true">
-                  {post.tag || '//'}
-                </span>
-                <span class="post-title font-mono">{post.title}</span>
-                <span class="post-arrow font-terminal" aria-hidden="true">→</span>
-              </a>
-            </li>
-          ))}
-        </ul>
-      </div>
-    ))}
+          <ul class="posts-list">
+            {byYear[year].map((post, i) => (
+              <li class="post-item" style={`transition-delay: ${i * 40}ms`}>
+                <a
+                  href={post.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="post-link"
+                  aria-label={post.title}
+                >
+                  <span class="post-tag font-terminal" aria-hidden="true">
+                    {post.tag || '//'}
+                  </span>
+                  <span class="post-title font-mono">{post.title}</span>
+                  <span class="post-arrow font-terminal" aria-hidden="true">
+                    →
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
   </div>
 </section>
 
@@ -85,7 +89,8 @@ const years = Object.keys(byYear)
     gap: 48px;
   }
 
-  .year-group {}
+  .year-group {
+  }
 
   .year-marker {
     display: flex;
@@ -157,6 +162,8 @@ const years = Object.keys(byYear)
   .post-arrow {
     font-size: 20px;
     color: var(--color-dim);
-    transition: color 0.2s, transform 0.2s;
+    transition:
+      color 0.2s,
+      transform 0.2s;
   }
 </style>

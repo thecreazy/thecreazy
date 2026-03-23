@@ -9,6 +9,8 @@
     "preview": "astro preview",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
     "version": "npx changeset version && npx changeset tag",
     "changeset": "npx changeset",
     "commit": "git add . && npx changeset add",
@@ -42,6 +44,7 @@
     "eslint": "^10.1.0",
     "eslint-plugin-astro": "^1.6.0",
     "prettier": "^3.0.3",
+    "prettier-plugin-astro": "^0.14.1",
     "typescript": "^5.5.4",
     "typescript-eslint": "^8.57.1"
   }

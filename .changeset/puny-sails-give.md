@@ -1,5 +1,5 @@
 ---
-"thecreazy": patch
+'thecreazy': patch
 ---
 
 improved peformances

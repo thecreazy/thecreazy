@@ -4,11 +4,11 @@
  * Zero cost until the Konami code is entered.
  */
 
-const STYLE_ID  = '__manga_styles__'
-const TONE_ID   = '__manga_tone__'
-const LINES_ID  = '__manga_lines__'
+const STYLE_ID = '__manga_styles__'
+const TONE_ID = '__manga_tone__'
+const LINES_ID = '__manga_lines__'
 const SPLASH_ID = '__manga_splash__'
-const IND_ID    = '__manga_indicator__'
+const IND_ID = '__manga_indicator__'
 
 // ── CSS injected when active ──────────────────────────────────────────────────
 
@@ -179,29 +179,43 @@ html.manga-mode .timeline-content{ border-left: 3px solid #000; padding-left: 16
 // ── SVG bubble builders ───────────────────────────────────────────────────────
 
 /** Classic oval speech bubble */
-function makeOvalSVG(text: string, w: number, h: number, fontSize: number, tailSide: 'left' | 'right' = 'left'): string {
+function makeOvalSVG(
+  text: string,
+  w: number,
+  h: number,
+  fontSize: number,
+  tailSide: 'left' | 'right' = 'left'
+): string {
   const bodyH = h - 36
-  const cx    = w / 2
-  const cy    = bodyH / 2 + 4
-  const rx    = w / 2 - 6
-  const ry    = bodyH / 2 - 4
+  const cx = w / 2
+  const cy = bodyH / 2 + 4
+  const rx = w / 2 - 6
+  const ry = bodyH / 2 - 4
 
   const tailBase = tailSide === 'left' ? cx - 24 : cx + 24
-  const tailTip  = tailSide === 'left' ? 18 : w - 18
-  const tipY     = h - 4
+  const tailTip = tailSide === 'left' ? 18 : w - 18
+  const tipY = h - 4
 
   // split multi-word text across lines
   const words = text.split(' ')
-  const lines  = words.length > 2 ? [words.slice(0, Math.ceil(words.length / 2)).join(' '), words.slice(Math.ceil(words.length / 2)).join(' ')] : [text]
-  const lineH  = fontSize * 1.35
+  const lines =
+    words.length > 2
+      ? [
+          words.slice(0, Math.ceil(words.length / 2)).join(' '),
+          words.slice(Math.ceil(words.length / 2)).join(' '),
+        ]
+      : [text]
+  const lineH = fontSize * 1.35
 
-  const textLines = lines.map((l, i) => {
-    const dy = cy - ((lines.length - 1) * lineH / 2) + i * lineH
-    return `<text x="${cx}" y="${dy}"
+  const textLines = lines
+    .map((l, i) => {
+      const dy = cy - ((lines.length - 1) * lineH) / 2 + i * lineH
+      return `<text x="${cx}" y="${dy}"
       text-anchor="middle" dominant-baseline="central"
       font-family="'Press Start 2P', monospace"
       font-size="${fontSize}" fill="#000" font-weight="bold">${l}</text>`
-  }).join('')
+    })
+    .join('')
 
   return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" overflow="visible">
   <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="white" stroke="black" stroke-width="4"/>
@@ -222,25 +236,33 @@ function makeSpikySVG(text: string, size: number, fontSize: number): string {
 
   let path = ''
   for (let i = 0; i < points * 2; i++) {
-    const r     = i % 2 === 0 ? outerR : innerR
-    const angle = (i * Math.PI / points) - Math.PI / 2
-    const x     = (cx + Math.cos(angle) * r).toFixed(2)
-    const y     = (cy + Math.sin(angle) * r).toFixed(2)
+    const r = i % 2 === 0 ? outerR : innerR
+    const angle = (i * Math.PI) / points - Math.PI / 2
+    const x = (cx + Math.cos(angle) * r).toFixed(2)
+    const y = (cy + Math.sin(angle) * r).toFixed(2)
     path += (i === 0 ? 'M' : 'L') + `${x},${y}`
   }
   path += 'Z'
 
   const words = text.split(' ')
-  const lines  = words.length > 2 ? [words.slice(0, Math.ceil(words.length / 2)).join(' '), words.slice(Math.ceil(words.length / 2)).join(' ')] : [text]
-  const lineH  = fontSize * 1.4
+  const lines =
+    words.length > 2
+      ? [
+          words.slice(0, Math.ceil(words.length / 2)).join(' '),
+          words.slice(Math.ceil(words.length / 2)).join(' '),
+        ]
+      : [text]
+  const lineH = fontSize * 1.4
 
-  const textLines = lines.map((l, i) => {
-    const dy = cy - ((lines.length - 1) * lineH / 2) + i * lineH
-    return `<text x="${cx}" y="${dy}"
+  const textLines = lines
+    .map((l, i) => {
+      const dy = cy - ((lines.length - 1) * lineH) / 2 + i * lineH
+      return `<text x="${cx}" y="${dy}"
       text-anchor="middle" dominant-baseline="central"
       font-family="'Press Start 2P', monospace"
       font-size="${fontSize}" fill="#000" font-weight="bold">${l}</text>`
-  }).join('')
+    })
+    .join('')
 
   return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}" xmlns="http://www.w3.org/2000/svg" overflow="visible">
   <path d="${path}" fill="white" stroke="black" stroke-width="3.5" stroke-linejoin="round"/>
@@ -250,9 +272,9 @@ function makeSpikySVG(text: string, size: number, fontSize: number): string {
 
 /** Jagged rectangular scream bubble */
 function makeJaggedSVG(text: string, w: number, h: number, fontSize: number): string {
-  const pad   = 16
+  const pad = 16
   const bodyH = h - 30
-  const jag   = 8
+  const jag = 8
 
   // zigzag top
   let top = `M${pad},${jag} `
@@ -263,7 +285,8 @@ function makeJaggedSVG(text: string, w: number, h: number, fontSize: number): st
 
   // zigzag bottom
   let bot = ''
-  for (let x = w - pad; x > pad; x -= jag * 2) bot += `L${x - jag},${bodyH + jag} L${x - jag * 2},${bodyH} `
+  for (let x = w - pad; x > pad; x -= jag * 2)
+    bot += `L${x - jag},${bodyH + jag} L${x - jag * 2},${bodyH} `
 
   // left side + tail
   const jagPath = `${top}${right}${bot}L${pad},${jag}Z`
@@ -272,16 +295,24 @@ function makeJaggedSVG(text: string, w: number, h: number, fontSize: number): st
   const cy = bodyH / 2
 
   const words = text.split(' ')
-  const lines  = words.length > 2 ? [words.slice(0, Math.ceil(words.length / 2)).join(' '), words.slice(Math.ceil(words.length / 2)).join(' ')] : [text]
-  const lineH  = fontSize * 1.35
+  const lines =
+    words.length > 2
+      ? [
+          words.slice(0, Math.ceil(words.length / 2)).join(' '),
+          words.slice(Math.ceil(words.length / 2)).join(' '),
+        ]
+      : [text]
+  const lineH = fontSize * 1.35
 
-  const textLines = lines.map((l, i) => {
-    const dy = cy - ((lines.length - 1) * lineH / 2) + i * lineH
-    return `<text x="${cx}" y="${dy}"
+  const textLines = lines
+    .map((l, i) => {
+      const dy = cy - ((lines.length - 1) * lineH) / 2 + i * lineH
+      return `<text x="${cx}" y="${dy}"
       text-anchor="middle" dominant-baseline="central"
       font-family="'Press Start 2P', monospace"
       font-size="${fontSize}" fill="#000" font-weight="bold">${l}</text>`
-  }).join('')
+    })
+    .join('')
 
   return `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" xmlns="http://www.w3.org/2000/svg" overflow="visible">
   <path d="${jagPath}" fill="white" stroke="black" stroke-width="3.5" stroke-linejoin="round"/>
@@ -297,33 +328,33 @@ function makeJaggedSVG(text: string, w: number, h: number, fontSize: number): st
 type BubbleShape = 'oval' | 'spiky' | 'jagged'
 
 interface BubbleDef {
-  text:      string
-  shape:     BubbleShape
-  w:         number
-  h:         number
-  size:      number
-  fontSize:  number
-  tail?:     'left' | 'right'
+  text: string
+  shape: BubbleShape
+  w: number
+  h: number
+  size: number
+  fontSize: number
+  tail?: 'left' | 'right'
 }
 
 const BUBBLE_DATA: BubbleDef[] = [
-  { text: 'NANI?!',    shape: 'oval',   w: 260, h: 150, size: 260, fontSize: 18, tail: 'left'  },
-  { text: 'SUGOI!!',   shape: 'spiky',  w: 230, h: 230, size: 230, fontSize: 14              },
-  { text: 'BAKA!!',    shape: 'jagged', w: 250, h: 130, size: 250, fontSize: 18              },
-  { text: 'やばい!',   shape: 'oval',   w: 220, h: 140, size: 220, fontSize: 26, tail: 'right' },
-  { text: 'ARA ARA~',  shape: 'oval',   w: 290, h: 150, size: 290, fontSize: 14, tail: 'left'  },
-  { text: 'YAMETE!!',  shape: 'spiky',  w: 220, h: 220, size: 220, fontSize: 13              },
-  { text: '最高!!',    shape: 'jagged', w: 240, h: 130, size: 240, fontSize: 22              },
+  { text: 'NANI?!', shape: 'oval', w: 260, h: 150, size: 260, fontSize: 18, tail: 'left' },
+  { text: 'SUGOI!!', shape: 'spiky', w: 230, h: 230, size: 230, fontSize: 14 },
+  { text: 'BAKA!!', shape: 'jagged', w: 250, h: 130, size: 250, fontSize: 18 },
+  { text: 'やばい!', shape: 'oval', w: 220, h: 140, size: 220, fontSize: 26, tail: 'right' },
+  { text: 'ARA ARA~', shape: 'oval', w: 290, h: 150, size: 290, fontSize: 14, tail: 'left' },
+  { text: 'YAMETE!!', shape: 'spiky', w: 220, h: 220, size: 220, fontSize: 13 },
+  { text: '最高!!', shape: 'jagged', w: 240, h: 130, size: 240, fontSize: 22 },
 ]
 
 const POSITIONS: { top?: string; bottom?: string; left?: string; right?: string }[] = [
-  { top:    '8%',  left:  '2%'  },
-  { top:    '5%',  right: '2%'  },
-  { top:   '42%',  left:  '1%'  },
-  { top:   '52%',  right: '1%'  },
-  { top:   '78%',  left:  '3%'  },
-  { top:   '25%',  right: '2%'  },
-  { bottom: '8%',  right: '3%'  },
+  { top: '8%', left: '2%' },
+  { top: '5%', right: '2%' },
+  { top: '42%', left: '1%' },
+  { top: '52%', right: '1%' },
+  { top: '78%', left: '3%' },
+  { top: '25%', right: '2%' },
+  { bottom: '8%', right: '3%' },
 ]
 
 const ROTS = [-10, 8, -5, 9, -7, 6, -12]
@@ -353,9 +384,9 @@ function injectBlush() {
 // ── SFX floating text ─────────────────────────────────────────────────────────
 
 const SFX_DATA = [
-  { text: 'DOOOM!', size: 28, top: '20%',  left: '25%',  rot:  -8 },
-  { text: 'KYAA~',  size: 22, top: '65%',  right: '20%', rot:   6 },
-  { text: 'BWOOM',  size: 24, bottom: '20%', left: '30%', rot: -5 },
+  { text: 'DOOOM!', size: 28, top: '20%', left: '25%', rot: -8 },
+  { text: 'KYAA~', size: 22, top: '65%', right: '20%', rot: 6 },
+  { text: 'BWOOM', size: 24, bottom: '20%', left: '30%', rot: -5 },
 ]
 
 function injectSFX() {
@@ -365,10 +396,10 @@ function injectSFX() {
     el.style.setProperty('--rot', `${sfx.rot}deg`)
     el.style.fontSize = sfx.size + 'px'
     el.style.animationDelay = `${900 + i * 150}ms`
-    if (sfx.top)    el.style.top    = sfx.top
+    if (sfx.top) el.style.top = sfx.top
     if (sfx.bottom) el.style.bottom = sfx.bottom
-    if (sfx.left)   el.style.left   = sfx.left
-    if (sfx.right)  el.style.right  = sfx.right
+    if (sfx.left) el.style.left = sfx.left
+    if (sfx.right) el.style.right = sfx.right
     el.textContent = sfx.text
     document.body.appendChild(el)
   })
@@ -401,35 +432,35 @@ function injectBubbles() {
 function drawSpeedLines(): Promise<void> {
   return new Promise((resolve) => {
     const canvas = document.createElement('canvas')
-    canvas.id    = LINES_ID
+    canvas.id = LINES_ID
     document.body.appendChild(canvas)
 
     const ctx = canvas.getContext('2d')!
-    const w   = canvas.width  = window.innerWidth
-    const h   = canvas.height = window.innerHeight
-    const cx  = w * 0.5
-    const cy  = h * 0.42
+    const w = (canvas.width = window.innerWidth)
+    const h = (canvas.height = window.innerHeight)
+    const cx = w * 0.5
+    const cy = h * 0.42
 
     const maxR = Math.sqrt(w * w + h * h)
 
     for (let i = 0; i < 160; i++) {
-      const angle  = (i / 160) * Math.PI * 2
+      const angle = (i / 160) * Math.PI * 2
       const jitter = (Math.random() - 0.5) * 0.05
       const startR = 30 + Math.random() * 60
-      const endR   = maxR
+      const endR = maxR
 
-      ctx.lineWidth   = Math.random() * 2 + 0.2
+      ctx.lineWidth = Math.random() * 2 + 0.2
       ctx.strokeStyle = `rgba(0,0,0,${(Math.random() * 0.35 + 0.08).toFixed(2)})`
       ctx.beginPath()
       ctx.moveTo(cx + Math.cos(angle + jitter) * startR, cy + Math.sin(angle + jitter) * startR)
-      ctx.lineTo(cx + Math.cos(angle) * endR,            cy + Math.sin(angle) * endR)
+      ctx.lineTo(cx + Math.cos(angle) * endR, cy + Math.sin(angle) * endR)
       ctx.stroke()
     }
 
     canvas.style.opacity = '0'
-    let opacity   = 0
+    let opacity = 0
     let direction = 1
-    let held      = 0
+    let held = 0
 
     const tick = () => {
       if (direction === 1) {
@@ -440,7 +471,11 @@ function drawSpeedLines(): Promise<void> {
         if (held > 8) direction = -1
       } else {
         opacity = Math.max(opacity - 0.06, 0)
-        if (opacity <= 0) { canvas.style.opacity = '0'; resolve(); return }
+        if (opacity <= 0) {
+          canvas.style.opacity = '0'
+          resolve()
+          return
+        }
       }
       canvas.style.opacity = String(opacity)
       requestAnimationFrame(tick)
@@ -454,7 +489,7 @@ function drawSpeedLines(): Promise<void> {
 function showSplash(): Promise<void> {
   return new Promise((resolve) => {
     const el = document.createElement('div')
-    el.id    = SPLASH_ID
+    el.id = SPLASH_ID
     el.innerHTML = `
       <div class="splash-title">MANGA MODE<br>ACTIVATED!</div>
       <div class="splash-sub">[ ↑↑↓↓←→←→BA ]</div>
@@ -468,8 +503,8 @@ function showSplash(): Promise<void> {
 
 export async function activate() {
   if (!document.getElementById(STYLE_ID)) {
-    const style       = document.createElement('style')
-    style.id          = STYLE_ID
+    const style = document.createElement('style')
+    style.id = STYLE_ID
     style.textContent = CSS
     document.head.appendChild(style)
   }
@@ -480,7 +515,7 @@ export async function activate() {
 
   if (!document.getElementById(TONE_ID)) {
     const tone = document.createElement('div')
-    tone.id    = TONE_ID
+    tone.id = TONE_ID
     document.body.appendChild(tone)
   }
 
@@ -490,9 +525,9 @@ export async function activate() {
   injectSFX()
 
   if (!document.getElementById(IND_ID)) {
-    const ind         = document.createElement('div')
-    ind.id            = IND_ID
-    ind.textContent   = 'MANGA MODE'
+    const ind = document.createElement('div')
+    ind.id = IND_ID
+    ind.textContent = 'MANGA MODE'
     document.body.appendChild(ind)
   }
 }
@@ -503,7 +538,6 @@ export function deactivate() {
     el.style.animation = 'bubbleOut 0.3s ease forwards'
     setTimeout(() => el.remove(), 350)
   })
-
   ;[TONE_ID, LINES_ID, SPLASH_ID, IND_ID].forEach((id) => {
     document.getElementById(id)?.remove()
   })

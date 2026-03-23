@@ -1,5 +1,5 @@
 ---
-"thecreazy": patch
+'thecreazy': patch
 ---
 
 fix cursor on links

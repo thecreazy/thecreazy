@@ -27,10 +27,10 @@ const data = parseReadme(raw)
 
   <!-- Nav dots (section indicator) -->
   <nav class="section-nav" aria-label="Page sections">
-    <a href="#hero"     class="nav-dot" aria-label="Intro"    title="intro"></a>
+    <a href="#hero" class="nav-dot" aria-label="Intro" title="intro"></a>
     <a href="#projects" class="nav-dot" aria-label="Projects" title="projects"></a>
-    <a href="#blog"     class="nav-dot" aria-label="Blog"     title="blog"></a>
-    <a href="#cv"       class="nav-dot" aria-label="CV"       title="cv"></a>
+    <a href="#blog" class="nav-dot" aria-label="Blog" title="blog"></a>
+    <a href="#cv" class="nav-dot" aria-label="CV" title="cv"></a>
   </nav>
 </BaseLayout>
 
@@ -57,7 +57,9 @@ const data = parseReadme(raw)
     height: 8px;
     background: var(--color-border);
     display: block;
-    transition: background 0.2s, transform 0.2s;
+    transition:
+      background 0.2s,
+      transform 0.2s;
     position: relative;
   }
 
@@ -75,7 +77,9 @@ const data = parseReadme(raw)
   }
 
   @media (max-width: 768px) {
-    .section-nav { display: none; }
+    .section-nav {
+      display: none;
+    }
   }
 </style>
 
