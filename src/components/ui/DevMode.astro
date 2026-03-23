@@ -346,209 +346,57 @@ const { raw } = Astro.props
   }
 </style>
 
-<script is:inline>
-  ;(function () {
-    const panel = document.getElementById('devmode-panel')
-    const trigger = document.getElementById('devmode-trigger')
-    const closeBtn = document.getElementById('devmode-close')
-    const tabs = document.querySelectorAll('.tab')
-    const panels = document.querySelectorAll('.tab-content')
+<script>
+  import { startFPS, stopFPS, initLCP } from '../../scripts/devmode/fps'
+  import { startMatrix, stopMatrix } from '../../scripts/devmode/matrix'
+  import { populateThemeEditor } from '../../scripts/devmode/themeEditor'
 
-    let open = false
-    let matrixRAF = null
-    let fpsRAF = null
-    let lastTime = performance.now()
-    let frames = 0
+  const panel = document.getElementById('devmode-panel')!
+  const trigger = document.getElementById('devmode-trigger')!
+  const closeBtn = document.getElementById('devmode-close')!
+  const tabs = document.querySelectorAll<HTMLButtonElement>('.tab')
+  const tabPanels = document.querySelectorAll<HTMLElement>('.tab-content')
 
-    // ── open / close ──────────────────────────────────────────────────────────
-    function openPanel() {
-      open = true
-      panel.classList.add('open')
-      panel.setAttribute('aria-hidden', 'false')
-      startFPS()
-      populateThemeEditor()
+  let open = false
+
+  function openPanel() {
+    open = true
+    panel.classList.add('open')
+    panel.setAttribute('aria-hidden', 'false')
+    startFPS()
+    populateThemeEditor()
+  }
+
+  function closePanel() {
+    open = false
+    panel.classList.remove('open')
+    panel.setAttribute('aria-hidden', 'true')
+    stopMatrix()
+    stopFPS()
+  }
+
+  trigger.addEventListener('click', () => (open ? closePanel() : openPanel()))
+  closeBtn.addEventListener('click', closePanel)
+
+  document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.shiftKey && e.key === 'D') {
+      e.preventDefault()
+      if (open) closePanel()
+      else openPanel()
     }
+    if (e.key === 'Escape' && open) closePanel()
+  })
 
-    function closePanel() {
-      open = false
-      panel.classList.remove('open')
-      panel.setAttribute('aria-hidden', 'true')
-      stopMatrix()
-      stopFPS()
-    }
-
-    trigger.addEventListener('click', () => (open ? closePanel() : openPanel()))
-    closeBtn.addEventListener('click', closePanel)
-
-    document.addEventListener('keydown', (e) => {
-      if (e.ctrlKey && e.shiftKey && e.key === 'D') {
-        e.preventDefault()
-        if (open) closePanel()
-        else openPanel()
-      }
-      if (e.key === 'Escape' && open) closePanel()
+  tabs.forEach((tab) => {
+    tab.addEventListener('click', () => {
+      const target = tab.dataset.tab
+      tabs.forEach((t) => t.classList.toggle('active', t.dataset.tab === target))
+      tabPanels.forEach((p) => p.classList.toggle('active', p.dataset.panel === target))
+      if (target === 'matrix') startMatrix()
+      else stopMatrix()
+      if (target === 'perf') startFPS()
     })
+  })
 
-    // ── tabs ──────────────────────────────────────────────────────────────────
-    tabs.forEach((tab) => {
-      tab.addEventListener('click', () => {
-        const target = tab.dataset.tab
-        tabs.forEach((t) => t.classList.toggle('active', t.dataset.tab === target))
-        panels.forEach((p) => p.classList.toggle('active', p.dataset.panel === target))
-        if (target === 'matrix') startMatrix()
-        else stopMatrix()
-        if (target === 'perf') startFPS()
-      })
-    })
-
-    // ── FPS counter ───────────────────────────────────────────────────────────
-    function startFPS() {
-      const el = document.getElementById('fps-counter')
-      if (!el) return
-
-      function tick(now) {
-        frames++
-        if (now - lastTime >= 1000) {
-          el.textContent = frames + ' fps'
-          frames = 0
-          lastTime = now
-
-          // extras
-          const mem = performance.memory
-          if (mem) {
-            document.getElementById('mem-value').textContent =
-              Math.round(mem.usedJSHeapSize / 1048576) + ' MB'
-          }
-          document.getElementById('current-theme').textContent =
-            document.documentElement.getAttribute('data-theme') ?? '?'
-          document.getElementById('webgl-status').textContent = document.getElementById(
-            'webgl-canvas'
-          )?.tagName
-            ? 'active'
-            : 'off'
-        }
-        fpsRAF = requestAnimationFrame(tick)
-      }
-
-      fpsRAF = requestAnimationFrame(tick)
-    }
-
-    function stopFPS() {
-      if (fpsRAF) cancelAnimationFrame(fpsRAF)
-    }
-
-    // ── LCP via PerformanceObserver ────────────────────────────────────────────
-    if (typeof PerformanceObserver !== 'undefined') {
-      try {
-        new PerformanceObserver((list) => {
-          const entries = list.getEntries()
-          const last = entries[entries.length - 1]
-          const el = document.getElementById('lcp-value')
-          if (el) el.textContent = Math.round(last.startTime) + ' ms'
-        }).observe({ type: 'largest-contentful-paint', buffered: true })
-      } catch {
-        /* PerformanceObserver not supported */
-      }
-    }
-
-    // ── Theme editor ──────────────────────────────────────────────────────────
-    function populateThemeEditor() {
-      const editor = document.getElementById('theme-editor')
-      if (!editor || editor.children.length > 0) return
-
-      const vars = [
-        '--color-bg',
-        '--color-surface',
-        '--color-border',
-        '--color-accent',
-        '--color-accent2',
-        '--color-text',
-        '--color-dim',
-      ]
-
-      const root = document.documentElement
-
-      vars.forEach((v) => {
-        const val = getComputedStyle(root).getPropertyValue(v).trim()
-        const row = document.createElement('div')
-        row.style.cssText =
-          'display:flex;align-items:center;gap:16px;padding:8px 0;border-bottom:1px solid var(--color-border)'
-
-        const swatch = document.createElement('input')
-        swatch.type = 'color'
-        swatch.value = val.startsWith('#') ? val : '#888888'
-        swatch.style.cssText =
-          'width:32px;height:32px;border:none;background:none;cursor:none;padding:0'
-        swatch.addEventListener('input', () => {
-          root.style.setProperty(v, swatch.value)
-        })
-
-        const name = document.createElement('span')
-        name.textContent = v
-        name.style.cssText =
-          'font-size:11px;color:var(--color-dim);flex:1;font-family:"IBM Plex Mono",monospace'
-
-        const current = document.createElement('span')
-        current.textContent = val
-        current.style.cssText =
-          'font-size:11px;color:var(--color-accent);font-family:"IBM Plex Mono",monospace'
-
-        row.appendChild(swatch)
-        row.appendChild(name)
-        row.appendChild(current)
-        editor.appendChild(row)
-      })
-    }
-
-    // ── Matrix rain ───────────────────────────────────────────────────────────
-    function startMatrix() {
-      const canvas = document.getElementById('matrix-canvas')
-      if (!canvas) return
-      const ctx = canvas.getContext('2d')
-
-      canvas.width = canvas.offsetWidth
-      canvas.height = canvas.offsetHeight
-
-      const cols = Math.floor(canvas.width / 16)
-      const drops = Array(cols).fill(1)
-      const chars = '01アウエオカキクケコサシスセソタチツテトナニヌネノABCDEF<>{}[]|/'
-
-      function getMatrixColors() {
-        const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
-        return {
-          trail: isDark ? 'rgba(10,10,10,0.05)' : 'rgba(247,247,247,0.07)',
-          char: isDark ? '#55a566' : '#01470f',
-          head: isDark ? '#b6a8db' : '#5b21b6',
-        }
-      }
-
-      function draw() {
-        const { trail, char, head } = getMatrixColors()
-
-        ctx.fillStyle = trail
-        ctx.fillRect(0, 0, canvas.width, canvas.height)
-        ctx.font = '14px "IBM Plex Mono"'
-
-        drops.forEach((y, i) => {
-          const glyph = chars[Math.floor(Math.random() * chars.length)]
-          // brightest char at the head of the drop
-          ctx.fillStyle = y === 1 ? head : char
-          ctx.fillText(glyph, i * 16, y * 16)
-          if (y * 16 > canvas.height && Math.random() > 0.975) drops[i] = 0
-          drops[i]++
-        })
-
-        matrixRAF = requestAnimationFrame(draw)
-      }
-
-      draw()
-    }
-
-    function stopMatrix() {
-      if (matrixRAF) {
-        cancelAnimationFrame(matrixRAF)
-        matrixRAF = null
-      }
-    }
-  })()
+  initLCP()
 </script>
