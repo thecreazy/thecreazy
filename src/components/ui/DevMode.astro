@@ -1,4 +1,6 @@
 ---
+import { version } from '../../../package.json'
+
 interface Props {
   raw: string
 }
@@ -67,7 +69,7 @@ const { raw } = Astro.props
       </div>
       <div class="perf-item">
         <span class="perf-label font-pixel">VERSION</span>
-        <span class="perf-value">v2.0.1</span>
+        <span class="perf-value">v{version}</span>
       </div>
     </div>
   </div>
@@ -123,13 +125,20 @@ const { raw } = Astro.props
     display: flex;
     flex-direction: column;
     transform: translateY(100%);
-    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    visibility: hidden;
+    transition:
+      transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      visibility 0s linear 0.4s;
     border-top: 2px solid var(--color-accent);
     box-shadow: 0 -4px 40px var(--color-glow);
   }
 
   .devmode-panel.open {
     transform: translateY(0);
+    visibility: visible;
+    transition:
+      transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+      visibility 0s linear 0s;
   }
 
   /* ── header ── */
