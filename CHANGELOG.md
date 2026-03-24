@@ -1,5 +1,20 @@
 # thecreazy
 
+## 2.0.0
+
+### Major Changes
+
+- 7e91509: ui revamp with dark/light/manga mode
+
+### Minor Changes
+
+- 83a2e2a: Show blog images on hover
+
+### Patch Changes
+
+- d8d7526: improved peformances
+- 65c07b8: fix cursor on links
+
 ## 1.7.0
 
 ### Minor Changes
