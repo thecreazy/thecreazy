@@ -30,6 +30,8 @@
 
 ## What i write:
 
+- 2026
+  - [🔮 100% of Nvidia Uses Claude Code. And You’re Still Debating Whether AI Is “Ready for Production.”](https://medium.com/@riccardocanella/100-of-nvidia-uses-claude-code-and-youre-still-debating-whether-ai-is-ready-for-production-196eb3e57a22)
 - 2025
   - [🔮 Two Years Later, Web Summit Felt Different](https://blog.canellariccardo.it/two-years-later-web-summit-felt-different-e3cb664b9732)
   - [🔮 Why finding a new job as an engineer is becoming so boring](https://blog.canellariccardo.it/why-finding-a-new-job-as-an-engineer-is-becoming-so-boring-1726936be2ba?sk=0a95a50f292b39d326229f30520e5b75)
