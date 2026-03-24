@@ -1,5 +1,11 @@
 # thecreazy
 
+## 2.0.2
+
+### Patch Changes
+
+- 4a7a3da: don't show dev mode on ios
+
 ## 2.0.1
 
 ### Patch Changes
