@@ -242,7 +242,7 @@ const years = Object.keys(byYear)
     }
   }
 
-  document.querySelectorAll<HTMLElement>('.post-link').forEach((link) => {
+  if (!window.matchMedia('(hover: none)').matches) document.querySelectorAll<HTMLElement>('.post-link').forEach((link) => {
     const url = link.dataset.url!
 
     link.addEventListener('mouseenter', async () => {
