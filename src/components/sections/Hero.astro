@@ -1,0 +1,190 @@
+---
+import type { HeroData, SocialLink } from '../../lib/types'
+
+interface Props {
+  hero: HeroData
+  socials: SocialLink[]
+}
+
+const { hero, socials } = Astro.props
+
+// Map label to a simple icon char for retro look
+const socialIcons: Record<string, string> = {
+  '/portfolio': '◈',
+  '/github': '◆',
+  '/blog': '◉',
+  '/linkedin': '◇',
+  '/x': '✕',
+  '/instagram': '◎',
+  '/photos': '◐',
+}
+---
+
+<section id="hero" class="hero">
+  <!-- Boot prompt -->
+  <div class="boot-prompt reveal">
+    <span class="font-terminal text-2xl" style="color:var(--color-dim)"> THECREAZY OS v1.7.0 </span>
+    <span class="font-terminal text-2xl blink-cursor" style="color:var(--color-accent)">█</span>
+  </div>
+
+  <!-- Name -->
+  <h1 class="hero-name font-terminal glitch reveal" data-text={hero.name}>
+    {hero.name}
+  </h1>
+
+  <!-- Tagline -->
+  <p class="hero-tagline font-mono reveal">
+    {hero.tagline}
+  </p>
+
+  <!-- Bullet info -->
+  <ul class="hero-bullets reveal">
+    {
+      hero.bullets.map((b) => (
+        <li class="font-mono">
+          <span class="bullet-arrow" style="color:var(--color-accent)">
+            ›
+          </span>
+          <span set:html={b} />
+        </li>
+      ))
+    }
+  </ul>
+
+  <!-- Socials -->
+  <nav class="socials reveal" aria-label="Social links">
+    {
+      socials.map((s) => (
+        <a
+          href={s.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="social-link font-pixel glow"
+          aria-label={s.label}
+        >
+          <span class="social-icon">{socialIcons[s.label] ?? '◈'}</span>
+          <span class="social-label">{s.label}</span>
+        </a>
+      ))
+    }
+  </nav>
+
+  <!-- Scroll hint -->
+  <div class="scroll-hint reveal font-pixel">
+    <span style="color:var(--color-dim)">scroll_down</span>
+    <span class="blink-cursor" style="color:var(--color-accent)">▼</span>
+  </div>
+</section>
+
+<style>
+  .hero {
+    min-height: 100svh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 80px 0 60px;
+    gap: 32px;
+  }
+
+  .boot-prompt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .blink-cursor {
+    animation: blink 1s step-end infinite;
+  }
+
+  @keyframes blink {
+    0%,
+    100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0;
+    }
+  }
+
+  .hero-name {
+    font-size: clamp(56px, 10vw, 120px);
+    line-height: 1;
+    color: var(--color-text);
+    letter-spacing: -0.02em;
+    text-shadow:
+      0 0 20px var(--color-glow),
+      0 0 60px var(--color-glow);
+  }
+
+  .hero-tagline {
+    font-size: clamp(14px, 2vw, 18px);
+    color: var(--color-dim);
+    max-width: 600px;
+    border-left: 2px solid var(--color-accent);
+    padding-left: 16px;
+  }
+
+  .hero-bullets {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .hero-bullets li {
+    font-size: 14px;
+    color: var(--color-text);
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+
+  .bullet-arrow {
+    font-size: 18px;
+    line-height: 1;
+  }
+
+  .socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    padding: 10px 14px;
+    transition:
+      border-color 0.2s,
+      box-shadow 0.2s,
+      color 0.2s;
+    text-decoration: none;
+  }
+
+  .social-link:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    box-shadow: 0 0 12px var(--color-glow);
+    opacity: 1;
+  }
+
+  .social-icon {
+    font-family: monospace;
+    font-size: 14px;
+  }
+
+  .scroll-hint {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .scroll-hint .blink-cursor {
+    font-size: 14px;
+  }
+</style>

@@ -1,0 +1,7 @@
+dist/
+node_modules/
+.astro/
+pnpm-lock.yaml
+
+# prettier-plugin-astro cannot parse HTML comments inside JSX .map() expressions
+src/components/sections/CV.astro

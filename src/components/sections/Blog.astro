@@ -1,0 +1,261 @@
+---
+import type { BlogPost } from '../../lib/types'
+
+interface Props {
+  posts: BlogPost[]
+}
+
+const { posts } = Astro.props
+
+const byYear = posts.reduce<Record<number, BlogPost[]>>((acc, p) => {
+  ;(acc[p.year] ??= []).push(p)
+  return acc
+}, {})
+
+const years = Object.keys(byYear)
+  .map(Number)
+  .sort((a, b) => b - a)
+---
+
+<section id="blog" class="section">
+  <header class="section-header reveal">
+    <span class="section-label font-pixel">03.</span>
+    <h2 class="section-title font-terminal">what_i_write</h2>
+  </header>
+
+  <div class="blog-list">
+    {
+      years.map((year) => (
+        <div class="year-group reveal">
+          <div class="year-marker">
+            <span class="year-label font-terminal">{year}</span>
+            <div class="year-line" />
+          </div>
+
+          <ul class="posts-list">
+            {byYear[year].map((post, i) => (
+              <li class="post-item" style={`transition-delay: ${i * 40}ms`}>
+                <a
+                  href={post.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="post-link"
+                  aria-label={post.title}
+                  data-url={post.url}
+                >
+                  <span class="post-tag font-terminal" aria-hidden="true">
+                    {post.tag || '//'}
+                  </span>
+                  <span class="post-title font-mono">{post.title}</span>
+                  <span class="post-arrow font-terminal" aria-hidden="true">
+                    →
+                  </span>
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+
+<style>
+  .section {
+    padding: 120px 0;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 60px;
+  }
+
+  .section-label {
+    font-size: 12px;
+    color: var(--color-accent);
+  }
+
+  .section-title {
+    font-size: clamp(36px, 5vw, 56px);
+    color: var(--color-text);
+    line-height: 1;
+  }
+
+  .blog-list {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .year-marker {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .year-label {
+    font-size: 42px;
+    color: var(--color-accent);
+    line-height: 1;
+    min-width: 80px;
+  }
+
+  .year-line {
+    flex: 1;
+    height: 1px;
+    background: var(--color-border);
+  }
+
+  .posts-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .post-item {
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .post-link {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 14px 8px;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: padding-left 0.2s;
+  }
+
+  .post-link:hover {
+    padding-left: 16px;
+    opacity: 1;
+  }
+
+  .post-link:hover .post-arrow {
+    color: var(--color-accent);
+    transform: translate(4px, 0);
+  }
+
+  .post-link:hover .post-title {
+    color: var(--color-accent);
+  }
+
+  .post-tag {
+    font-size: 24px;
+    min-width: 36px;
+    color: var(--color-accent2);
+  }
+
+  .post-title {
+    flex: 1;
+    font-size: 14px;
+    line-height: 1.4;
+    transition: color 0.2s;
+  }
+
+  .post-arrow {
+    font-size: 20px;
+    color: var(--color-dim);
+    transition:
+      color 0.2s,
+      transform 0.2s;
+  }
+
+</style>
+
+<script>
+  // Inject bg layer directly into body — keeps it outside #content's stacking
+  // context (z-index 10) so it renders between the WebGL canvas and the content.
+  const bg = document.createElement('div')
+  bg.setAttribute('aria-hidden', 'true')
+  Object.assign(bg.style, {
+    position: 'fixed',
+    inset: '0',
+    zIndex: '0', // WebGL canvas=0 (bg comes after in DOM so on top), scanlines=1 above, #content=10 above
+    pointerEvents: 'none',
+    opacity: '0',
+    transition: 'opacity 0.9s ease',
+  })
+
+  const bgImg = document.createElement('img')
+  bgImg.alt = ''
+  Object.assign(bgImg.style, {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    display: 'block',
+    filter: 'saturate(0.25) brightness(0.55) blur(1px)',
+  })
+
+  // Fixed dark overlay — works on both light and dark themes.
+  // The image should read as a ghost, not as a distraction.
+  const bgOverlay = document.createElement('div')
+  Object.assign(bgOverlay.style, {
+    position: 'absolute',
+    inset: '0',
+    background: 'rgba(0, 0, 0, 0.45)',
+  })
+
+  bg.appendChild(bgImg)
+  bg.appendChild(bgOverlay)
+  document.body.appendChild(bg)
+
+  const webgl = document.getElementById('webgl-canvas') as HTMLElement | null
+
+  const cache = new Map<string, string>()
+  let hideTimer: ReturnType<typeof setTimeout> | null = null
+  let currentUrl = ''
+
+  function updateOverlay() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark'
+    bgOverlay.style.background = isDark ? 'rgba(0,0,0,0.5)' : 'rgba(247,247,247,0.65)'
+  }
+
+  function show(src: string) {
+    if (bgImg.src !== src) bgImg.src = src
+    updateOverlay()
+    bg.style.opacity = '1'
+    if (webgl) webgl.style.opacity = '0'
+  }
+
+  function hide() {
+    bg.style.opacity = '0'
+    if (webgl) webgl.style.opacity = ''
+    currentUrl = ''
+  }
+
+  async function fetchOg(url: string): Promise<string | null> {
+    if (cache.has(url)) return cache.get(url)!
+    try {
+      const res = await fetch(`https://api.microlink.io/?url=${encodeURIComponent(url)}`)
+      const json = await res.json()
+      const ogUrl: string | undefined = json?.data?.image?.url
+      if (ogUrl) cache.set(url, ogUrl)
+      return ogUrl ?? null
+    } catch {
+      return null
+    }
+  }
+
+  if (!window.matchMedia('(hover: none)').matches) document.querySelectorAll<HTMLElement>('.post-link').forEach((link) => {
+    const url = link.dataset.url!
+
+    link.addEventListener('mouseenter', async () => {
+      if (hideTimer) { clearTimeout(hideTimer); hideTimer = null }
+      if (currentUrl === url) return
+      currentUrl = url
+
+      const ogUrl = await fetchOg(url)
+      if (ogUrl && currentUrl === url) show(ogUrl)
+    })
+
+    link.addEventListener('mouseleave', () => {
+      hideTimer = setTimeout(hide, 200)
+    })
+  })
+</script>

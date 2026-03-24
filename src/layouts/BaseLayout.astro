@@ -1,0 +1,198 @@
+---
+import '../styles/global.css'
+
+interface Props {
+  title?: string
+  description?: string
+}
+
+const {
+  title = 'Riccardo Canella — Product Engineering Lead',
+  description = 'Personal site of Riccardo Canella, Product Engineering Lead at Hirematic.',
+} = Astro.props
+---
+
+<!doctype html>
+<html lang="en" data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content={description} />
+    <meta name="author" content="Riccardo Canella" />
+
+    <!-- OG -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://canellariccardo.it" />
+    <meta property="og:image" content="https://canellariccardo.it/og.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="https://canellariccardo.it/og.png" />
+
+    <!-- Fonts (non-render-blocking) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=optional"
+      media="print"
+      onload="this.media='all'"
+    />
+    <noscript
+      ><link
+        rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=optional"
+      /></noscript
+    >
+
+    <!-- Favicons -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
+
+    <!-- Google Analytics (async, non-blocking) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-QEZ5WE0ZJR"></script>
+    <script is:inline>
+      window.dataLayer = window.dataLayer || []
+      // eslint-disable-next-line prefer-rest-params
+      function gtag() {
+        dataLayer.push(arguments)
+      }
+      gtag('js', new Date())
+      gtag('config', 'G-QEZ5WE0ZJR')
+    </script>
+
+    <title>{title}</title>
+  </head>
+  <body>
+    <!-- WebGL canvas (loaded async, non-blocking) -->
+    <canvas id="webgl-canvas" aria-hidden="true"></canvas>
+
+    <!-- CRT scanlines -->
+    <div class="scanlines" aria-hidden="true"></div>
+
+    <!-- Custom cursor -->
+    <div class="cursor" id="cursor" aria-hidden="true"></div>
+
+    <!-- Main content -->
+    <div id="content">
+      <slot />
+    </div>
+
+    <!-- Cursor script (inline, tiny) -->
+    <script is:inline>
+      const cursor = document.getElementById('cursor')
+      let mx = -100,
+        my = -100
+      document.addEventListener('mousemove', (e) => {
+        mx = e.clientX
+        my = e.clientY
+        cursor.style.left = mx + 'px'
+        cursor.style.top = my + 'px'
+      })
+      document.addEventListener('mouseleave', () => {
+        cursor.style.opacity = '0'
+      })
+      document.addEventListener('mouseenter', () => {
+        cursor.style.opacity = '1'
+      })
+
+      document.addEventListener('mouseover', (e) => {
+        if (e.target.closest('a, button, [role="button"]')) {
+          cursor.classList.add('is-hovering')
+        }
+      })
+      document.addEventListener('mouseout', (e) => {
+        if (e.target.closest('a, button, [role="button"]')) {
+          cursor.classList.remove('is-hovering')
+        }
+      })
+    </script>
+
+    <!-- WebGL loader (fully async, non-blocking, separate chunk) -->
+    <script>
+      async function initWebGL() {
+        try {
+          const canvas = document.getElementById('webgl-canvas') as HTMLCanvasElement
+          if (!canvas) return
+          const { WebGLScene } = await import('../scripts/webgl/scene.ts')
+          new WebGLScene(canvas)
+        } catch (e) {
+          // WebGL not available, site works fine without it
+          console.warn('WebGL not available:', e)
+        }
+      }
+
+      // Load after everything else
+      if (document.readyState === 'complete') {
+        setTimeout(initWebGL, 100)
+      } else {
+        window.addEventListener('load', () => setTimeout(initWebGL, 100))
+      }
+    </script>
+
+    <!-- Section reveal on scroll -->
+    <script is:inline>
+      const observer = new IntersectionObserver(
+        (entries) =>
+          entries.forEach((e) => {
+            if (e.isIntersecting) {
+              e.target.classList.add('visible')
+              observer.unobserve(e.target)
+            }
+          }),
+        { threshold: 0.1 }
+      )
+      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
+    </script>
+
+    <!-- Konami code → manga mode easter egg (pure inline, zero bundle cost) -->
+    <script>
+      import('../scripts/mangaMode.ts').then(() => {}) // pre-warm the chunk after load
+
+      const KONAMI = [
+        'ArrowUp',
+        'ArrowUp',
+        'ArrowDown',
+        'ArrowDown',
+        'ArrowLeft',
+        'ArrowRight',
+        'ArrowLeft',
+        'ArrowRight',
+        'b',
+        'a',
+      ]
+      let idx = 0
+      let active = false
+      let busy = false
+
+      document.addEventListener('keydown', async (e) => {
+        if (e.key !== KONAMI[idx]) {
+          idx = 0
+          return
+        }
+        idx++
+        if (idx < KONAMI.length) return
+        idx = 0
+
+        if (busy) return
+        busy = true
+
+        const { activate, deactivate } = await import('../scripts/mangaMode.ts')
+        if (active) {
+          deactivate()
+          active = false
+        } else {
+          await activate()
+          active = true
+        }
+
+        busy = false
+      })
+    </script>
+  </body>
+</html>

@@ -1,0 +1,192 @@
+---
+import type { CVEntry } from '../../lib/types'
+
+interface Props {
+  entries: CVEntry[]
+}
+
+const { entries } = Astro.props
+---
+
+<section id="cv" class="section">
+  <header class="section-header reveal">
+    <span class="section-label font-pixel">04.</span>
+    <h2 class="section-title font-terminal">my_cv</h2>
+  </header>
+
+  <div class="timeline">
+    {entries.map((entry, i) => (
+      <div class="timeline-item reveal" style={`transition-delay: ${i * 80}ms`}>
+        <!-- connector -->
+        <div class="timeline-connector" aria-hidden="true">
+          <div class="connector-dot"></div>
+          {i < entries.length - 1 && <div class="connector-line"></div>}
+        </div>
+
+        <!-- content -->
+        <div class="timeline-content">
+          {entry.url ? (
+            <a
+              href={entry.url}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="entry-company font-pixel glitch"
+              data-text={entry.company}
+            >
+              {entry.company}
+            </a>
+          ) : (
+            <span class="entry-company font-pixel" style="color:var(--color-dim)">
+              {entry.company}
+            </span>
+          )}
+
+          {entry.role && (
+            <p class="entry-role font-mono">{entry.role}</p>
+          )}
+
+          {entry.period && (
+            <p class="entry-period font-terminal">{entry.period}</p>
+          )}
+        </div>
+      </div>
+    ))}
+  </div>
+
+  <div class="cv-footer reveal">
+    <a
+      href="https://thecreazy.link/github"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="cv-link font-pixel"
+    >
+      <span>full_cv</span>
+      <span class="cv-link-arrow">→</span>
+    </a>
+  </div>
+</section>
+
+<style>
+  .section {
+    padding: 120px 0 160px;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    margin-bottom: 60px;
+  }
+
+  .section-label {
+    font-size: 12px;
+    color: var(--color-accent);
+  }
+
+  .section-title {
+    font-size: clamp(36px, 5vw, 56px);
+    color: var(--color-text);
+    line-height: 1;
+  }
+
+  .timeline {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    max-width: 640px;
+  }
+
+  .timeline-item {
+    display: grid;
+    grid-template-columns: 24px 1fr;
+    gap: 24px;
+  }
+
+  .timeline-connector {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 6px;
+  }
+
+  .connector-dot {
+    width: 10px;
+    height: 10px;
+    border: 2px solid var(--color-accent);
+    flex-shrink: 0;
+    box-shadow: 0 0 8px var(--color-glow);
+  }
+
+  .connector-line {
+    flex: 1;
+    width: 1px;
+    background: var(--color-border);
+    margin: 6px 0;
+    min-height: 40px;
+  }
+
+  .timeline-content {
+    padding-bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .entry-company {
+    font-size: 12px;
+    color: var(--color-accent);
+    text-decoration: none;
+    line-height: 1.6;
+    transition: opacity 0.2s;
+  }
+
+  a.entry-company:hover {
+    opacity: 0.7;
+  }
+
+  .entry-role {
+    font-size: 14px;
+    color: var(--color-text);
+  }
+
+  .entry-period {
+    font-size: 24px;
+    color: var(--color-dim);
+    line-height: 1;
+  }
+
+  .cv-footer {
+    margin-top: 40px;
+    padding-left: 48px;
+  }
+
+  .cv-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--color-text);
+    border: 1px solid var(--color-border);
+    padding: 14px 20px;
+    text-decoration: none;
+    transition: border-color 0.2s, box-shadow 0.2s, color 0.2s;
+  }
+
+  .cv-link:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+    box-shadow: 0 0 12px var(--color-glow);
+    opacity: 1;
+  }
+
+  .cv-link-arrow {
+    font-family: 'VT323', monospace;
+    font-size: 20px;
+    transition: transform 0.2s;
+  }
+
+  .cv-link:hover .cv-link-arrow {
+    transform: translateX(4px);
+  }
+</style>

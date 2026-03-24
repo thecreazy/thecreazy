@@ -1,0 +1,103 @@
+---
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
+import { parseReadme } from '../lib/parseReadme'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Hero from '../components/sections/Hero.astro'
+import Projects from '../components/sections/Projects.astro'
+import Blog from '../components/sections/Blog.astro'
+import CV from '../components/sections/CV.astro'
+import ThemeToggle from '../components/ui/ThemeToggle.astro'
+import DevMode from '../components/ui/DevMode.astro'
+
+const raw = readFileSync(join(process.cwd(), 'README.md'), 'utf-8')
+const data = parseReadme(raw)
+---
+
+<BaseLayout>
+  <ThemeToggle />
+  <DevMode raw={data.raw} />
+
+  <main>
+    <Hero hero={data.hero} socials={data.socials} />
+    <Projects projects={data.projects} />
+    <Blog posts={data.blog} />
+    <CV entries={data.cv} />
+  </main>
+
+  <!-- Nav dots (section indicator) -->
+  <nav class="section-nav" aria-label="Page sections">
+    <a href="#hero" class="nav-dot" aria-label="Intro" title="intro"></a>
+    <a href="#projects" class="nav-dot" aria-label="Projects" title="projects"></a>
+    <a href="#blog" class="nav-dot" aria-label="Blog" title="blog"></a>
+    <a href="#cv" class="nav-dot" aria-label="CV" title="cv"></a>
+  </nav>
+</BaseLayout>
+
+<style>
+  main {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .section-nav {
+    position: fixed;
+    right: 24px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    z-index: 100;
+  }
+
+  .nav-dot {
+    width: 8px;
+    height: 8px;
+    background: var(--color-border);
+    display: block;
+    transition:
+      background 0.2s,
+      transform 0.2s;
+    position: relative;
+  }
+
+  .nav-dot::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+  }
+
+  .nav-dot:hover,
+  .nav-dot.active {
+    background: var(--color-accent);
+    transform: scale(1.5);
+    box-shadow: 0 0 8px var(--color-glow);
+  }
+
+  @media (max-width: 768px) {
+    .section-nav {
+      display: none;
+    }
+  }
+</style>
+
+<script is:inline>
+  // Active nav dot on scroll
+  const dots = document.querySelectorAll('.nav-dot')
+  const sections = ['hero', 'projects', 'blog', 'cv']
+
+  function updateDots() {
+    const scrollY = window.scrollY + window.innerHeight / 2
+    let active = 0
+    sections.forEach((id, i) => {
+      const el = document.getElementById(id)
+      if (el && el.offsetTop <= scrollY) active = i
+    })
+    dots.forEach((d, i) => d.classList.toggle('active', i === active))
+  }
+
+  window.addEventListener('scroll', updateDots, { passive: true })
+  updateDots()
+</script>
