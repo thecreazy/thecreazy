@@ -31,6 +31,7 @@
 ## What i write:
 
 - 2026
+  - [👨‍💻 I Let Claude Code Rebuild My Digital Face. Here’s What I Got Wrong.](https://medium.com/@riccardocanella/i-let-claude-code-rebuild-my-digital-face-heres-what-i-got-wrong-e052a03d4cf0)
   - [🔮 100% of Nvidia Uses Claude Code. And You’re Still Debating Whether AI Is “Ready for Production.”](https://medium.com/@riccardocanella/100-of-nvidia-uses-claude-code-and-youre-still-debating-whether-ai-is-ready-for-production-196eb3e57a22)
 - 2025
   - [🔮 Two Years Later, Web Summit Felt Different](https://blog.canellariccardo.it/two-years-later-web-summit-felt-different-e3cb664b9732)
