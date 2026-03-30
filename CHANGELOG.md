@@ -1,5 +1,11 @@
 # thecreazy
 
+## 2.2.0
+
+### Minor Changes
+
+- 7d05fc5: New article 2026
+
 ## 2.1.1
 
 ### Patch Changes
