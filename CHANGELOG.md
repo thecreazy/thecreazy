@@ -1,5 +1,11 @@
 # thecreazy
 
+## 2.3.0
+
+### Minor Changes
+
+- e49bace: Added new articles
+
 ## 2.2.0
 
 ### Minor Changes
