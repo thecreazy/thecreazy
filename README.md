@@ -31,6 +31,8 @@
 ## What i write:
 
 - 2026
+  - [🔮 The Web Is About to Change in a Way Most Developers Aren’t Ready For](https://medium.com/@riccardocanella/the-web-is-about-to-change-in-a-way-most-developers-arent-ready-for-03306b821bff)
+  - [🔮 We Broke Our Codebases for Humans. Agents Want Them Back in One Piece.](https://medium.com/@riccardocanella/we-broke-our-codebases-for-humans-agents-want-them-back-in-one-piece-e07418c27382)
   - [🔮 We Don’t Know How to Monitor AI Agents. The METR Report Just Made That Official.](https://medium.com/@riccardocanella/we-dont-know-how-to-monitor-ai-agents-the-metr-report-just-made-that-official-654b74c68f8a)
   - [👨‍💻 I Let Claude Code Rebuild My Digital Face. Here’s What I Got Wrong.](https://medium.com/@riccardocanella/i-let-claude-code-rebuild-my-digital-face-heres-what-i-got-wrong-e052a03d4cf0)
   - [🔮 100% of Nvidia Uses Claude Code. And You’re Still Debating Whether AI Is “Ready for Production.”](https://medium.com/@riccardocanella/100-of-nvidia-uses-claude-code-and-youre-still-debating-whether-ai-is-ready-for-production-196eb3e57a22)
