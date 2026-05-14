@@ -1,6 +1,6 @@
 # Riccardo Canella
 
-### From Italy living in Italy 🤌, where I work as a Product Enginering Lead at Hirematic. With a fullstack javascript background, my strength lies in websites and apps. If you want to know more about me, my work or if youʼre a head hunter who wants to offer me a lot of money, feel free to contact me on canella_riccardo[at]icloud.com.
+### From Italy 🤌. I lead product engineering at Hirematic and work independently as a Software Architect on things I find genuinely interesting: AI-driven systems, generative interfaces, complex user experiences. If you want to know more about me or my work — or if you're a headhunter with a number worth considering — riccardo.canella92[at]gmail.com.
 
 - 👷 I’m currently doing magic stuffs in [Hirematic](https://hirematic.com)
 - 🖊️ Sometimes I write on my medium blog: [blog.canellariccardo.it](https://thecreazy.link/blog)
@@ -79,8 +79,9 @@
 
 ## My cv:
 
+- Independent Software Architect (2026 - present)
 - [Hirematic](https://www.linkedin.com/company/hirematic/) Product Engineering Lead (2022/Mar - present)
-- [Lastminte.com](https://www.linkedin.com/company/lastminute.com/) Senior Frontend Engineer - Hotel area (2019/Dec - 2022/Feb)
+- [Lastminute.com](https://www.linkedin.com/company/lastminute.com/) Senior Frontend Engineer - Hotel area (2019/Dec - 2022/Feb)
 - [Jobtome.com](https://www.linkedin.com/company/jobtome-com/) Senior Frontend Engineer (2018/Nov - 2019/Nov)
 - [Caffeina](https://caffeina.com) Frontend Developer (2017/Jun - 2018/Oct)
 - [IQUII](https://iquii.com) Full-stack Developer (2015/Feb - 2017/May)
