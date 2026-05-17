@@ -1,5 +1,11 @@
 # thecreazy
 
+## 2.4.0
+
+### Minor Changes
+
+- 30310c6: New background and mouse animations
+
 ## 2.3.0
 
 ### Minor Changes
