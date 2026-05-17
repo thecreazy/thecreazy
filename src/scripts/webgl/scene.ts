@@ -70,7 +70,13 @@ void main(){
   float n=(n1*.5+n2*.3+n3*.2)*.5+.5;
   vec2 q=uv-.5;
   float vignette=clamp(1.-dot(q,q)*1.8,0.,1.);
-  vec3 color=mix(uColorBg,uColorA,n*0.07)*vignette;
+
+  // Aurora gradient: top of screen gets more accent color in dark mode
+  float aurora=uDark*uv.y*0.22;
+  // Subtle horizon glow where the CSS grid line sits (~55% from bottom)
+  float horizonGlow=uDark*exp(-abs(uv.y-0.45)*16.0)*0.14;
+
+  vec3 color=mix(uColorBg,uColorA,n*0.08+aurora+horizonGlow)*vignette;
   float grain=snoise(vec3(uv*700.,uTime*15.))*.03;
   color+=grain*(uDark>.5?.5:.15);
   gl_FragColor=vec4(color,1.0);
@@ -105,11 +111,37 @@ function getThemeColors(): { accent: THREE.Vector3; bg: THREE.Vector3; dark: num
   }
 }
 
+const STAR_VERT = /* glsl */ `
+attribute float aPhase;
+varying float vAlpha;
+uniform float uTime;
+uniform float uDark;
+void main() {
+  // abs(sin) keeps alpha always positive (0.4–1.0)
+  float twinkle = 0.4 + 0.6 * abs(sin(uTime * 1.1 + aPhase));
+  vAlpha = twinkle * uDark;
+  gl_Position = vec4(position, 1.0);
+  // size always >= 3px so it's visible even on retina
+  gl_PointSize = 3.0 + 2.0 * abs(sin(uTime * 0.6 + aPhase + 1.3));
+}
+`
+
+const STAR_FRAG = /* glsl */ `
+varying float vAlpha;
+uniform vec3 uColorA;
+void main() {
+  float d = length(gl_PointCoord - 0.5) * 2.0;
+  float disc = 1.0 - smoothstep(0.0, 1.0, d);
+  gl_FragColor = vec4(uColorA + 0.3, vAlpha * disc);
+}
+`
+
 export class WebGLScene {
   private renderer: THREE.WebGLRenderer
   private scene: THREE.Scene
   private camera: THREE.OrthographicCamera
   private material: THREE.ShaderMaterial
+  private starMaterial: THREE.ShaderMaterial | null = null
   private raf: number = 0
   private start: number = performance.now()
 
@@ -139,8 +171,43 @@ export class WebGLScene {
     const mesh = new THREE.Mesh(geo, this.material)
     this.scene.add(mesh)
 
+    this.createStars()
     this.bindEvents()
     this.tick()
+  }
+
+  private createStars() {
+    const count = 130
+    const positions = new Float32Array(count * 3)
+    const phases = new Float32Array(count)
+
+    for (let i = 0; i < count; i++) {
+      positions[i * 3] = (Math.random() - 0.5) * 2.1
+      // y: 0.15–1.0 = upper screen above the synthwave horizon
+      positions[i * 3 + 1] = Math.random() * 0.85 + 0.15
+      positions[i * 3 + 2] = 0
+      phases[i] = Math.random() * Math.PI * 2
+    }
+
+    const geoStars = new THREE.BufferGeometry()
+    geoStars.setAttribute('position', new THREE.BufferAttribute(positions, 3))
+    geoStars.setAttribute('aPhase', new THREE.BufferAttribute(phases, 1))
+
+    // Share uniform objects with main material so theme/time updates propagate automatically
+    this.starMaterial = new THREE.ShaderMaterial({
+      vertexShader: STAR_VERT,
+      fragmentShader: STAR_FRAG,
+      uniforms: {
+        uTime: this.material.uniforms.uTime,
+        uDark: this.material.uniforms.uDark,
+        uColorA: this.material.uniforms.uColorA,
+      },
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    })
+
+    this.scene.add(new THREE.Points(geoStars, this.starMaterial))
   }
 
   private tick = () => {

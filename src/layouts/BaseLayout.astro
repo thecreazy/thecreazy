@@ -72,6 +72,11 @@ const {
     <!-- WebGL canvas (loaded async, non-blocking) -->
     <canvas id="webgl-canvas" aria-hidden="true"></canvas>
 
+    <!-- Synthwave perspective grid -->
+    <div class="synthwave-grid" aria-hidden="true">
+      <div class="synthwave-grid__plane"></div>
+    </div>
+
     <!-- CRT scanlines -->
     <div class="scanlines" aria-hidden="true"></div>
 
@@ -86,31 +91,61 @@ const {
     <!-- Cursor script (inline, tiny) -->
     <script is:inline>
       const cursor = document.getElementById('cursor')
-      let mx = -100,
-        my = -100
+      let mx = -100, my = -100
+      let headingEl = null
+
       document.addEventListener('mousemove', (e) => {
         mx = e.clientX
         my = e.clientY
-        cursor.style.left = mx + 'px'
-        cursor.style.top = my + 'px'
+        if (!headingEl) {
+          cursor.style.left = mx + 'px'
+          cursor.style.top = my + 'px'
+        }
       })
-      document.addEventListener('mouseleave', () => {
-        cursor.style.opacity = '0'
-      })
-      document.addEventListener('mouseenter', () => {
-        cursor.style.opacity = '1'
-      })
+      document.addEventListener('mouseleave', () => { cursor.style.opacity = '0' })
+      document.addEventListener('mouseenter', () => { cursor.style.opacity = '1' })
 
       document.addEventListener('mouseover', (e) => {
         if (e.target.closest('a, button, [role="button"]')) {
           cursor.classList.add('is-hovering')
+        }
+        const h = e.target.closest('.section-title, h1, h2, h3')
+        if (h && !headingEl) {
+          headingEl = h
+          const r = h.getBoundingClientRect()
+          cursor.classList.add('is-heading')
+          cursor.style.width = r.width + 'px'
+          cursor.style.left = (r.left + r.width / 2) + 'px'
+          cursor.style.top = (r.bottom + 4) + 'px'
         }
       })
       document.addEventListener('mouseout', (e) => {
         if (e.target.closest('a, button, [role="button"]')) {
           cursor.classList.remove('is-hovering')
         }
+        const h = e.target.closest('.section-title, h1, h2, h3')
+        // relatedTarget check avoids false triggers when moving between children
+        if (h && !h.contains(e.relatedTarget)) {
+          headingEl = null
+          cursor.classList.remove('is-heading')
+          cursor.style.width = ''
+          cursor.style.left = mx + 'px'
+          cursor.style.top = my + 'px'
+        }
       })
+    </script>
+
+    <!-- Cursor trail (async, non-blocking) -->
+    <script>
+      async function initTrail() {
+        const { initCursorTrail } = await import('../scripts/cursorTrail.ts')
+        initCursorTrail()
+      }
+      if (document.readyState === 'complete') {
+        initTrail()
+      } else {
+        window.addEventListener('load', initTrail)
+      }
     </script>
 
     <!-- WebGL loader (fully async, non-blocking, separate chunk) -->
