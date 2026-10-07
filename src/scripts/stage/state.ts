@@ -9,6 +9,8 @@ export interface StageState {
   intro: number
   /** intro skin → holographic skin (what i code). */
   holo: number
+  /** progress through the pinned horizontal track of what i code. */
+  works: number
   /** holographic skin → empty frame (what i write). */
   frame: number
   /** frame → white skin (my cv). */
@@ -20,6 +22,8 @@ export interface StageState {
 }
 
 export type StageListener = (state: StageState) => void
+
+export type Stage = ReturnType<typeof createStage>
 
 const clamp01 = (v: number) => Math.min(Math.max(v, 0), 1)
 const smoothstep = (t: number) => t * t * (3 - 2 * t)
@@ -53,6 +57,7 @@ export function createStage(scroller: HTMLElement, sections: HTMLElement[]) {
       move: smoothstep(clamp01(scroller.scrollTop / (vh * 0.6))),
       intro: 1 - ramp(projectsTop, vh, 1.1, 0.4),
       holo: ramp(projectsTop, vh, 0.7, 0.3),
+      works: clamp01(-projectsTop / Math.max(1, projects.offsetHeight - vh)),
       frame: ramp(blogTop, vh, 0.7, 0.3),
       cv: ramp(cvTop, vh, 0.7, 0.3),
       exit: ramp(cvTop, vh, 0.3, 0.6),

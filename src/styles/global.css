@@ -96,7 +96,8 @@ a {
 }
 
 /* Content dissolves under the diamond once it is parked at the top. */
-.has-diamond #scroll {
+.has-diamond #scroll,
+.has-diamond #holo {
   --mask-edge: calc(var(--veil-h) * var(--veil));
   -webkit-mask-image: linear-gradient(
     to bottom,
@@ -112,6 +113,7 @@ a {
   );
 }
 
+#holo,
 #diamond {
   position: fixed;
   inset: 0;
@@ -120,6 +122,11 @@ a {
   height: 100vh;
   height: 100dvh;
   pointer-events: none;
+}
+
+/* Under the content, above the pastel. */
+#holo {
+  z-index: 0;
 }
 
 @media (prefers-reduced-motion: reduce) {

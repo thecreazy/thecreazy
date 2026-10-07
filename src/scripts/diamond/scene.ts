@@ -179,6 +179,15 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
     const { holo: holoT, frame: frameT, cv: cvT, exit: exitT } = st
 
     spinGroup.position.y = st.move * topTargetY()
+    // Quarter turn while the what i code track scrolls sideways. The skin is
+    // fully holographic there (same pattern on every face, no text), so the
+    // square slab looks identical at 0° and 90°: at the end of the track the
+    // turn snaps back to 0° invisibly and the next skins keep their text on
+    // the right faces.
+    if (!reducedMotion) {
+      mesh.rotation.y = Math.PI / 4 + (st.works % 1) * (Math.PI / 2)
+      holo.uniforms.uQuarter.value = st.works >= 1 ? 1 : 0
+    }
     spinGroup.scale.setScalar(INTRO_SCALE + (1 - INTRO_SCALE) * st.move)
 
     // intro → holographic

@@ -1,5 +1,6 @@
 import { createStage } from './state'
 import { paintPastel, layoutPastel } from './pastel'
+import { initWorks } from '../works'
 
 const scroller = document.getElementById('scroll')
 const pastel = document.getElementById('pastel-canvas') as HTMLCanvasElement | null
@@ -44,23 +45,45 @@ if (scroller && sections.length === 4) {
     document.documentElement.classList.add('can-reveal')
   }
 
-  // WebGL diamond: separate chunk, loaded after everything else. Without
-  // WebGL the diamond simply isn't there and the page works as is.
-  const canvas = document.getElementById('diamond') as HTMLCanvasElement | null
+  // What i code: pinned horizontal track.
+  initWorks(stage, scroller, reducedMotion)
+
+  // WebGL layers: separate chunks, loaded after everything else. Without
+  // WebGL the diamond and the holo surfaces simply aren't there and the page
+  // works as is.
+  const diamondCanvas = document.getElementById('diamond') as HTMLCanvasElement | null
+  const holoCanvas = document.getElementById('holo') as HTMLCanvasElement | null
 
   async function initDiamond() {
-    if (!canvas) return
+    if (!diamondCanvas) return
     try {
       const { createDiamond } = await import('../diamond/scene')
-      const diamond = await createDiamond(canvas, { reducedMotion })
+      const diamond = await createDiamond(diamondCanvas, { reducedMotion })
       stage.subscribe(diamond.update)
       document.documentElement.classList.add('has-diamond')
     } catch (e) {
-      canvas.remove()
+      diamondCanvas.remove()
       console.warn('WebGL not available:', e)
     }
   }
 
-  if (document.readyState === 'complete') initDiamond()
-  else window.addEventListener('load', () => initDiamond())
+  async function initHolo() {
+    if (!holoCanvas) return
+    try {
+      const { createHoloSurfaces } = await import('../holo/surfaces')
+      const holo = await createHoloSurfaces(holoCanvas, { reducedMotion })
+      stage.subscribe(holo.update)
+      document.documentElement.classList.add('has-holo')
+    } catch (e) {
+      holoCanvas.remove()
+      console.warn('Holo surfaces not available:', e)
+    }
+  }
+
+  const initWebGL = () => {
+    initDiamond()
+    initHolo()
+  }
+  if (document.readyState === 'complete') initWebGL()
+  else window.addEventListener('load', initWebGL)
 }

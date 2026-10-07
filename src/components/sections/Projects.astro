@@ -7,32 +7,262 @@ interface Props {
 }
 
 const { projects, moreUrl } = Astro.props
+const pad = (n: number) => String(n).padStart(2, '0')
 ---
 
-<section id="projects" class="section">
-  <header class="section-head">
-    <p class="eyebrow">what i code</p>
-    <h2>Selected <em>work</em></h2>
-  </header>
+<section id="projects" class="works" data-works>
+  <div class="works-pin" data-works-pin>
+    <div class="works-track" data-works-track>
+      <header class="works-head">
+        <p class="eyebrow">what i code</p>
+        <h2>Things I <em>build</em></h2>
+      </header>
 
-  <ul class="items">
-    {
-      projects.map((p) => (
-        <li>
-          <a href={p.url} target="_blank" rel="noopener noreferrer" class="item">
-            <span class="item-title">{p.name}</span>
-            <span class="item-sub">{p.description}</span>
+      <ul class="works-list">
+        {
+          projects.map((p, i) => (
+            <li>
+              <a
+                href={p.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="work"
+                data-work
+                data-holo
+              >
+                <div class="work-face" data-holo-face>
+                  <span class="work-index">{pad(i + 1)}</span>
+                  <span class="work-name">{p.name}</span>
+                  <span class="work-desc">{p.description}</span>
+                  <span class="work-arrow" aria-hidden="true">
+                    →
+                  </span>
+                </div>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+
+      {
+        moreUrl && (
+          <a
+            href={moreUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="works-more"
+            data-holo
+            data-holo-text
+          >
+            <span data-holo-line>more on</span>
+            <span data-holo-line>github →</span>
           </a>
-        </li>
-      ))
-    }
-  </ul>
+        )
+      }
+    </div>
 
-  {
-    moreUrl && (
-      <a href={moreUrl} target="_blank" rel="noopener noreferrer" class="more">
-        all projects →
-      </a>
-    )
-  }
+    <p class="works-counter eyebrow" aria-hidden="true">
+      <span data-works-current>01</span> / {pad(projects.length)}
+    </p>
+  </div>
 </section>
+
+<style>
+  /* ─── default: vertical list (no JS, reduced motion) ─────────────────── */
+
+  .works {
+    position: relative;
+  }
+
+  .works-pin {
+    padding: calc(var(--veil-h) + 8vh) max(24px, 8vw) 18vh;
+  }
+
+  .works-track {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3rem;
+  }
+
+  .works-head {
+    text-align: center;
+  }
+
+  .works-head .eyebrow {
+    margin-bottom: 0.6rem;
+  }
+
+  .works-head h2 {
+    font-size: clamp(2.2rem, 6vw, 3.4rem);
+    font-weight: 400;
+    line-height: 1.1;
+  }
+
+  .works-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    width: min(100%, 520px);
+  }
+
+  .work {
+    display: block;
+    height: 100%;
+  }
+
+  .work-face {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 220px;
+    padding: 1.6rem 1.7rem;
+    background: #101014;
+    border: 1px solid color-mix(in srgb, var(--paper) 18%, transparent);
+    transform-origin: 50% 50%;
+    will-change: transform;
+    text-shadow: 0 1px 14px rgba(0, 0, 0, 0.45);
+  }
+
+  .work-index {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+  }
+
+  .work-name {
+    margin-top: auto;
+    font-family: 'Archivo Black', 'Arial Black', sans-serif;
+    font-size: clamp(1.6rem, 3vw, 2.4rem);
+    line-height: 1;
+    text-transform: uppercase;
+    overflow-wrap: anywhere;
+  }
+
+  .work-desc {
+    margin-top: 0.7rem;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.3;
+    opacity: 0.85;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .work-arrow {
+    position: absolute;
+    top: 1.4rem;
+    right: 1.6rem;
+    font-family: var(--font-mono);
+    opacity: 0.6;
+    transition:
+      transform 0.25s,
+      opacity 0.25s;
+  }
+
+  .work:hover .work-arrow,
+  .work:focus-visible .work-arrow {
+    opacity: 1;
+    transform: translateX(4px);
+  }
+
+  .works-more {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-family: 'Archivo Black', 'Arial Black', sans-serif;
+    font-size: clamp(2.6rem, 7vw, 6rem);
+    line-height: 1;
+  }
+
+  .works-more span {
+    white-space: nowrap;
+  }
+
+  .works-counter {
+    display: none;
+  }
+
+  /* ─── WebGL holo under the panels: the DOM only keeps the content ────── */
+
+  :global(.has-holo) .work-face {
+    background: transparent;
+    border-color: transparent;
+  }
+
+  :global(.has-holo) .works-more {
+    color: transparent;
+  }
+
+  /* ─── pinned horizontal track (JS, motion allowed) ───────────────────── */
+
+  :global(.works-horizontal) .works-pin {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    height: 100dvh;
+    padding: 0;
+    overflow: clip;
+  }
+
+  :global(.works-horizontal) .works-track {
+    position: absolute;
+    top: calc(var(--veil-h) + 2vh);
+    bottom: 11vh;
+    left: 0;
+    flex-direction: row;
+    align-items: stretch;
+    gap: 3vw;
+    width: max-content;
+    padding: 0 8vw;
+    will-change: transform;
+  }
+
+  :global(.works-horizontal) .works-head {
+    align-self: center;
+    width: clamp(220px, 24vw, 340px);
+    text-align: left;
+  }
+
+  :global(.works-horizontal) .works-list {
+    flex-direction: row;
+    gap: 3vw;
+    width: auto;
+  }
+
+  :global(.works-horizontal) .works-list li {
+    width: clamp(280px, 34vw, 500px);
+  }
+
+  :global(.works-horizontal) .work-face {
+    min-height: 0;
+  }
+
+  :global(.works-horizontal) .works-more {
+    align-self: center;
+    justify-content: center;
+    padding-right: 4vw;
+  }
+
+  :global(.works-horizontal) .works-counter {
+    display: block;
+    position: absolute;
+    left: max(24px, 8vw);
+    bottom: 4vh;
+  }
+
+  @media (max-width: 640px) {
+    :global(.works-horizontal) .works-head {
+      width: 64vw;
+    }
+
+    :global(.works-horizontal) .works-list li {
+      width: 78vw;
+    }
+  }
+</style>
