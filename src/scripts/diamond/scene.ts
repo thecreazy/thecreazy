@@ -3,6 +3,7 @@ import type { StageState } from '../stage/state'
 import { SIDE, HEIGHT, texWhite, texWord, texFrameBand } from './textures'
 import { createHoloMaterial } from './holo'
 import { buildFrame } from './frame'
+import type { ArticleChange } from '../articles'
 
 // The diamond: a white slab with the name ticking along its sides that
 // changes skin section by section (intro → holographic → empty frame →
@@ -49,8 +50,22 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
   const TEX_WHITE = texWhite()
   const TEX_RICCARDO = texWord('Riccardo')
   const TEX_CANELLA = texWord('Canella')
-  const TEX_BAND = texFrameBand('Riccardo Canella')
-  TEX_BAND.repeat.x = 2 // the band spans two walls (U 0 → 2)
+  // Frame band: the title of the article currently shown in what i write.
+  const bands = new Map<string, THREE.Texture>()
+  const bandFor = (text: string) => {
+    if (!bands.has(text)) bands.set(text, texFrameBand(text))
+    return bands.get(text)!
+  }
+  const firstTitle = document.querySelector<HTMLElement>('[data-articles]')?.dataset.current
+  let band = bandFor(firstTitle || 'Riccardo Canella')
+  let pendingBand: THREE.Texture | null = null
+  let bandFade = 1
+  let textWallBase = 0
+
+  window.addEventListener('article:change', (e) => {
+    const next = bandFor((e as CustomEvent<ArticleChange>).detail.title)
+    pendingBand = next === band ? null : next
+  })
 
   const skin = (map: THREE.Texture) =>
     new THREE.MeshStandardMaterial({ map, roughness: 0.5, transparent: true, depthWrite: false })
@@ -109,7 +124,7 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
   mesh.add(edges)
 
   // ─── frame skin ──────────────────────────────────────────────────────────
-  const frame = buildFrame(TEX_WHITE, TEX_BAND)
+  const frame = buildFrame(TEX_WHITE, band)
   frame.group.renderOrder = 2
   frame.group.visible = false
   mesh.add(frame.group)
@@ -229,13 +244,17 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
     const exitOpacity = 1 - exitT
     introSkins.forEach((m) => (m.opacity *= exitOpacity))
     mesh.visible = exitOpacity > 0.001
+
+    textWallBase = frame.textWall.opacity
   }
 
   // ─── render loop ─────────────────────────────────────────────────────────
   const clock = new THREE.Clock()
   let drawn = false
 
-  function frameLoop() {
+  let lastNow = performance.now()
+
+  function frameLoop(now = performance.now()) {
     requestAnimationFrame(frameLoop)
     // Nothing on screen after the exit: clear once, then idle.
     if (!mesh.visible) {
@@ -257,7 +276,22 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
     // Ticker: the name scrolls along the faces.
     TEX_RICCARDO.offset.x = (t * 0.08) % 1
     TEX_CANELLA.offset.x = -(t * 0.08) % 1
-    TEX_BAND.offset.x = (t * 0.06) % 1
+    band.offset.x = (t * 0.06 * band.userData.speed) % 1
+
+    // Title change: fade the band out, swap the texture, fade it back in.
+    const dt = Math.min((now - lastNow) / 1000, 0.1)
+    lastNow = now
+    if (pendingBand) {
+      bandFade = Math.max(0, bandFade - dt * 5)
+      if (bandFade === 0) {
+        band = pendingBand
+        pendingBand = null
+        frame.textWall.map = band
+      }
+    } else {
+      bandFade = Math.min(1, bandFade + dt * 5)
+    }
+    frame.textWall.opacity = textWallBase * bandFade
 
     sweepLight.position.set(Math.cos(t * 0.4) * 4, 2, Math.sin(t * 0.4) * 4)
 

@@ -30,7 +30,8 @@
 
 ## What i write:
 
-- 2026
+- 2026 
+  - [🔮 How I Resurrected a Dead Library and Accidentally Built a Surveillance Tool](https://medium.com/@riccardocanella/how-i-resurrected-a-dead-library-and-accidentally-built-a-surveillance-tool-776aedb85341)
   - [🔮 The Web Is About to Change in a Way Most Developers Aren’t Ready For](https://medium.com/@riccardocanella/the-web-is-about-to-change-in-a-way-most-developers-arent-ready-for-03306b821bff)
   - [🔮 We Broke Our Codebases for Humans. Agents Want Them Back in One Piece.](https://medium.com/@riccardocanella/we-broke-our-codebases-for-humans-agents-want-them-back-in-one-piece-e07418c27382)
   - [🔮 We Don’t Know How to Monitor AI Agents. The METR Report Just Made That Official.](https://medium.com/@riccardocanella/we-dont-know-how-to-monitor-ai-agents-the-metr-report-just-made-that-official-654b74c68f8a)

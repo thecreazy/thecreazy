@@ -54,7 +54,27 @@ export function texWhite() {
 
 export const texWord = (word: string) => toTexRepeat(band(word, TEX_W, TEX_H))
 
-export const texFrameBand = (text: string) => toTexRepeat(band(text, 2400, 300))
+const BAND_H = 300
+const BAND_TARGET = 2400
+// Safe texture width on mobile GPUs.
+const MAX_TEX = 4096
+
+// Name/title band for the frame walls. Long titles get a shorter canvas to
+// stay under MAX_TEX; repeat and speed are normalised on BAND_TARGET so the
+// glyphs keep the same size and pace on the walls whatever the text length
+// ("RICCARDO CANELLA" ≈ BAND_TARGET repeats twice across the two walls).
+export function texFrameBand(text: string) {
+  let c = band(text, BAND_TARGET, BAND_H)
+  const natural = c.width
+  if (natural > MAX_TEX) {
+    const k = MAX_TEX / natural
+    c = band(text, BAND_TARGET * k, Math.floor(BAND_H * k))
+  }
+  const t = toTexRepeat(c)
+  t.repeat.x = (2 * BAND_TARGET) / natural
+  t.userData.speed = BAND_TARGET / natural
+  return t
+}
 
 function toTex(c: HTMLCanvasElement) {
   const t = new THREE.CanvasTexture(c)

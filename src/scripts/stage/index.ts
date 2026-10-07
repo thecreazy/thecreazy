@@ -1,6 +1,7 @@
 import { createStage } from './state'
 import { paintPastel, layoutPastel } from './pastel'
 import { initWorks } from '../works'
+import { initArticles } from '../articles'
 
 const scroller = document.getElementById('scroll')
 const pastel = document.getElementById('pastel-canvas') as HTMLCanvasElement | null
@@ -47,6 +48,9 @@ if (scroller && sections.length === 4) {
 
   // What i code: pinned horizontal track.
   initWorks(stage, scroller, reducedMotion)
+
+  // What i write: pinned stage, articles crossfade with the scroll.
+  initArticles(stage)
 
   // WebGL layers: separate chunks, loaded after everything else. Without
   // WebGL the diamond and the holo surfaces simply aren't there and the page

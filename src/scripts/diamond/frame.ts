@@ -8,6 +8,8 @@ import { SIDE, HEIGHT } from './textures'
 export interface Frame {
   group: THREE.Group
   materials: THREE.MeshStandardMaterial[]
+  /** The material carrying the name/title band (also in `materials`). */
+  textWall: THREE.MeshStandardMaterial
   edges: THREE.LineBasicMaterial
 }
 
@@ -118,5 +120,10 @@ export function buildFrame(white: THREE.Texture, bandTex: THREE.Texture): Frame 
   const edges = new THREE.LineBasicMaterial({ color: 0x000000, transparent: true, opacity: 0 })
   group.add(new THREE.LineSegments(new THREE.EdgesGeometry(restGeo), edges))
 
-  return { group, materials: [topMat, textWallMat, whiteWallMat, restMat], edges }
+  return {
+    group,
+    materials: [topMat, textWallMat, whiteWallMat, restMat],
+    textWall: textWallMat,
+    edges,
+  }
 }

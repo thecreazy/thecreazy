@@ -1,6 +1,7 @@
 ---
-import { readFileSync } from 'node:fs'
-import { join } from 'node:path'
+// Imported as a module (not read from disk) so that the dev server reloads
+// the page whenever the README changes.
+import raw from '../../README.md?raw'
 import { parseReadme } from '../lib/parseReadme'
 import BaseLayout from '../layouts/BaseLayout.astro'
 import Hero from '../components/sections/Hero.astro'
@@ -8,10 +9,9 @@ import Projects from '../components/sections/Projects.astro'
 import Blog from '../components/sections/Blog.astro'
 import CV from '../components/sections/CV.astro'
 
-const raw = readFileSync(join(process.cwd(), 'README.md'), 'utf-8')
 const data = parseReadme(raw)
 
-const FEATURED = 4
+const ARTICLES = 5
 const social = (label: string) => data.socials.find((s) => s.label === label)?.url
 ---
 
@@ -19,7 +19,7 @@ const social = (label: string) => data.socials.find((s) => s.label === label)?.u
   <main>
     <Hero hero={data.hero} socials={data.socials} />
     <Projects projects={data.projects} moreUrl={social('/github')} />
-    <Blog posts={data.blog.slice(0, FEATURED)} moreUrl={social('/blog')} />
+    <Blog posts={data.blog.slice(0, ARTICLES)} moreUrl={social('/blog')} />
     <CV entries={data.cv} />
   </main>
 </BaseLayout>

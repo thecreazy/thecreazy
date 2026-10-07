@@ -70,6 +70,7 @@ export function createStage(scroller: HTMLElement, sections: HTMLElement[]) {
     state = compute()
     root.style.setProperty('--intro', state.intro.toFixed(4))
     root.style.setProperty('--veil', (state.move * (1 - state.exit)).toFixed(4))
+    root.style.setProperty('--lift', (state.frame * (1 - state.cv)).toFixed(4))
     listeners.forEach((fn) => fn(state))
   }
 
