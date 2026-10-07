@@ -12,6 +12,14 @@ const { posts, moreUrl } = Astro.props
 
 const host = (url: string) => new URL(url).hostname.replace(/^www\./, '')
 const pad = (n: number) => String(n).padStart(2, '0')
+// On phones the cover is turned 90° clockwise: each side of the frame then
+// shows a different side of the photo.
+const TURNED: Record<keyof EdgeTones, keyof EdgeTones> = {
+  top: 'left',
+  right: 'top',
+  bottom: 'right',
+  left: 'bottom',
+}
 const NO_IMAGE: EdgeTones = { top: 'light', bottom: 'light', left: 'light', right: 'light' }
 
 const articles = await Promise.all(
@@ -64,7 +72,10 @@ const speed = (title: string) => `--dur: ${Math.round(title.length * 1.1)}s`
                 )}
 
                 {(['top', 'bottom', 'left', 'right'] as const).map((side) => (
-                  <span class={`ticker ticker--${side} is-${tones[side]}`} aria-hidden="true">
+                  <span
+                    class={`ticker ticker--${side} is-${tones[side]} turned-${tones[TURNED[side]]}`}
+                    aria-hidden="true"
+                  >
                     <span class="ticker-track" style={speed(post.title)}>
                       <span>{run(post.title)}</span>
                       <span>{run(post.title)}</span>
@@ -72,7 +83,7 @@ const speed = (title: string) => `--dur: ${Math.round(title.length * 1.1)}s`
                   </span>
                 ))}
 
-                <p class={`article-meta is-${tones.top}`}>
+                <p class={`article-meta is-${tones.top} turned-${tones[TURNED.top]}`}>
                   <span class="article-title">{post.title}</span>
                   <span>
                     {post.year} · {host(post.url)}
@@ -469,6 +480,57 @@ const speed = (title: string) => `--dur: ${Math.round(title.length * 1.1)}s`
   @media (prefers-reduced-motion: reduce) {
     .all-articles-track {
       animation: none;
+    }
+  }
+
+  /* ─── phones: vertical frame ──────────────────────────────────────────
+     The cover is turned 90° clockwise and shown whole: the frame takes the
+     turned cover's proportions. Tickers use the tones of the turned photo. */
+
+  @media (max-width: 640px) {
+    .stage {
+      --band: 15px;
+      --inset: 6px;
+      /* room below for the steps and the button, on two rows */
+      width: min(100%, (100vh - var(--veil-h) + 10vh - 130px) * 630 / 1200);
+    }
+
+    .frames {
+      aspect-ratio: 630 / 1200;
+    }
+
+    /* Before turning, the image is as wide as the frame is tall. */
+    .article-img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: calc(100% * 1200 / 630);
+      max-width: none; /* the base reset caps images at 100% */
+      height: calc(100% * 630 / 1200);
+      transform: translate(-50%, -50%) rotate(90deg);
+    }
+
+    .turned-light {
+      color: #fff;
+    }
+
+    .turned-dark {
+      color: #111;
+    }
+
+    .article-meta {
+      font-size: 0.65rem;
+    }
+
+    .stage-foot {
+      flex-wrap: wrap;
+      justify-content: center;
+      row-gap: 0.6rem;
+      margin-top: 0.8rem;
+    }
+
+    .article-steps {
+      gap: 0.9rem;
     }
   }
 </style>
