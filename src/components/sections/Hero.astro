@@ -16,9 +16,10 @@ const [first, ...others] = hero.name.split(' ')
 const last = others.join(' ')
 
 // Entrance: the intro appears word by word, then bullets and socials follow.
-const WORD_MS = 12
+// Kept short: fast scrollers must still find the text already there.
+const WORD_MS = 5
 const words = intro.split(/\s+/).filter(Boolean)
-const afterWords = words.length * WORD_MS + 150
+const afterWords = words.length * WORD_MS + 60
 const delay = (ms: number) => `--d: ${Math.round(ms)}ms`
 ---
 
@@ -48,7 +49,7 @@ const delay = (ms: number) => `--d: ${Math.round(ms)}ms`
       <ul class="hero-bullets">
         {
           hero.bullets.map((b, i) => (
-            <li data-reveal style={delay(afterWords + i * 90)}>
+            <li data-reveal style={delay(afterWords + i * 50)}>
               {b}
             </li>
           ))
@@ -63,7 +64,7 @@ const delay = (ms: number) => `--d: ${Math.round(ms)}ms`
               target="_blank"
               rel="noopener noreferrer"
               data-reveal
-              style={delay(afterWords + hero.bullets.length * 90 + i * 50)}
+              style={delay(afterWords + hero.bullets.length * 50 + i * 25)}
             >
               {s.label}
             </a>

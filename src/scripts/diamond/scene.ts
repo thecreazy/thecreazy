@@ -6,6 +6,7 @@ import { buildFrame } from './frame'
 import type { ArticleChange } from '../articles'
 import { buildTower } from './tower'
 import { turnProgress } from '../cv/build'
+import { canvasPixelRatio } from '../stage/pixelRatio'
 
 // The diamond: a white slab with the name ticking along its sides that
 // changes skin section by section (intro → holographic → empty frame →
@@ -38,7 +39,7 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
   renderer.outputColorSpace = THREE.LinearSRGBColorSpace
   renderer.setClearColor(0x000000, 0)
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  renderer.setPixelRatio(canvasPixelRatio())
 
   const scene = new THREE.Scene()
   const camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100)

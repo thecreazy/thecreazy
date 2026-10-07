@@ -65,8 +65,16 @@ const items = [
     transform: rotate(45deg) scale(1.25);
   }
 
+  /* Phones: only on the intro; elsewhere it would sit on panels, tickers
+     and the tower. */
   @media (max-width: 640px) {
+    .section-nav:not(.is-intro) {
+      opacity: 0;
+      pointer-events: none;
+    }
+
     .section-nav {
+      transition: opacity 0.3s;
       right: max(10px, env(safe-area-inset-right));
       gap: 14px;
     }

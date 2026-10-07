@@ -86,6 +86,6 @@
 - [Jobtome.com](https://www.linkedin.com/company/jobtome-com/) Senior Frontend Engineer (2018/Nov - 2019/Nov)
 - [Caffeina](https://caffeina.com) Frontend Developer (2017/Jun - 2018/Oct)
 - [IQUII](https://iquii.com) Full-stack Developer (2015/Feb - 2017/May)
-- Very old and ugly tecnologies (2012/Nov - 2015/Jen)
+- Very old and ugly technologies (2012/Nov - 2015/Jen)
 
 If u want get a better look on my cv [click here 👨‍💻](https://thecreazy.link/github)

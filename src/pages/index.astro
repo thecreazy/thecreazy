@@ -20,6 +20,6 @@ const social = (label: string) => data.socials.find((s) => s.label === label)?.u
     <Hero hero={data.hero} socials={data.socials} />
     <Projects projects={data.projects} moreUrl={social('/github')} />
     <Blog posts={data.blog.slice(0, ARTICLES)} moreUrl={social('/blog')} />
-    <CV entries={data.cv} />
+    <CV entries={data.cv} email={data.hero.email} socials={data.socials} />
   </main>
 </BaseLayout>

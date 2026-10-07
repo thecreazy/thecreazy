@@ -1,0 +1,85 @@
+---
+// Loading screen: shown from the first paint (html.is-loading) until the
+// fonts, the pastel, the WebGL layers and the page are ready, see
+// src/scripts/stage/loader.ts. Never shown without JS (html.is-loading is
+// set by an inline script).
+---
+
+<div class="loader" data-loader aria-hidden="true">
+  <div class="loader-diamond"><span></span></div>
+  <p class="loader-label">
+    <span>riccardo canella</span>
+    <span data-loader-pct>0%</span>
+  </p>
+</div>
+
+<style>
+  .loader {
+    position: fixed;
+    inset: 0;
+    z-index: 30;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    background: var(--pastel);
+    color: var(--ink);
+    transition:
+      opacity 0.7s ease,
+      visibility 0s linear 0.7s;
+  }
+
+  :global(.is-loading) .loader,
+  :global(.is-ready) .loader {
+    display: flex;
+  }
+
+  :global(.is-ready) .loader {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  /* A small slab turning in 3D, like the big one. */
+  .loader-diamond {
+    width: 46px;
+    height: 46px;
+    perspective: 300px;
+  }
+
+  .loader-diamond span {
+    display: block;
+    width: 100%;
+    height: 100%;
+    background: #f5f4f0;
+    border: 1px solid var(--ink);
+    transform: rotateX(62deg) rotateZ(45deg);
+    animation: loader-turn 2.4s cubic-bezier(0.6, 0, 0.4, 1) infinite;
+  }
+
+  @keyframes loader-turn {
+    to {
+      transform: rotateX(62deg) rotateZ(405deg);
+    }
+  }
+
+  .loader-label {
+    display: flex;
+    gap: 1.2rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.1em;
+    opacity: 0.7;
+  }
+
+  [data-loader-pct] {
+    min-width: 3.5ch;
+    font-variant-numeric: tabular-nums;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .loader-diamond span {
+      animation: none;
+    }
+  }
+</style>

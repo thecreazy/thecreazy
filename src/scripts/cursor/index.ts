@@ -45,6 +45,7 @@ export function initCursor(stage: Stage, reducedMotion: boolean) {
   document.addEventListener('pointermove', (e) => {
     tx = e.clientX
     ty = e.clientY
+    wake()
     if (!seen) {
       seen = true
       x = tx
@@ -82,13 +83,26 @@ export function initCursor(stage: Stage, reducedMotion: boolean) {
     landed = count
   })
 
-  function tick() {
+  // The follow loop only runs while the diamond is catching up.
+  let running = false
+  function wake() {
+    if (running) return
+    running = true
     requestAnimationFrame(tick)
+  }
+
+  function tick() {
     x += (tx - x) * EASE
     y += (ty - y) * EASE
+    if (Math.abs(tx - x) < 0.1 && Math.abs(ty - y) < 0.1) {
+      x = tx
+      y = ty
+      running = false
+    } else {
+      requestAnimationFrame(tick)
+    }
     const t = `translate3d(${x.toFixed(1)}px, ${y.toFixed(1)}px, 0)`
     dot!.style.transform = t
     ring!.style.transform = t
   }
-  tick()
 }

@@ -51,16 +51,20 @@ function parseHero(lines: string[]): HeroData {
       tagline = tagline.replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
     } else if (line.startsWith('- ')) {
       // strip markdown but keep content
+      // Images (badges) first, as their alt text, then plain links.
       const bullet = line
         .replace(/^- /, '')
+        .replace(/!\[([^\]]*)\]\([^)]*\)/g, '$1')
         .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1')
-        .replace(/!\[[^\]]*\]\([^)]*\)/g, '')
         .trim()
       if (bullet) bullets.push(bullet)
     }
   }
 
-  return { name, tagline, bullets }
+  const mail = tagline.match(/([\w.+-]+)\[at\]([\w-]+(?:\.[\w-]+)+)/)
+  const email = mail ? { user: mail[1], domain: mail[2] } : undefined
+
+  return { name, tagline, bullets, email }
 }
 
 function parseSocials(lines: string[]): SocialLink[] {

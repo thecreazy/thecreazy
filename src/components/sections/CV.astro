@@ -1,11 +1,14 @@
 ---
-import type { CVEntry } from '../../lib/types'
+import type { CVEntry, HeroData, SocialLink } from '../../lib/types'
 
 interface Props {
   entries: CVEntry[]
+  email?: HeroData['email']
+  socials?: SocialLink[]
 }
 
-const { entries } = Astro.props
+const { entries, email, socials = [] } = Astro.props
+const year = new Date().getFullYear()
 
 const period = (e: CVEntry) => e.period.replace(' - ', ' – ')
 const sub = (e: CVEntry) => [e.role, period(e)].filter(Boolean).join(' · ')
@@ -45,6 +48,35 @@ const sub = (e: CVEntry) => [e.role, period(e)].filter(Boolean).join(' · ')
         full cv →
       </a>
     </div>
+
+    <!-- Closing words: once the tower is built (or after the list, without
+         WebGL). The address is assembled by JS to keep it from scrapers. -->
+    <footer class="cv-outro">
+      <p class="eyebrow">say hi</p>
+      <h2>Let’s <em>talk</em></h2>
+      {
+        email && (
+          <a
+            class="cv-mail"
+            data-mail-user={email.user}
+            data-mail-domain={email.domain}
+            data-cursor="write me"
+          >
+            {email.user} [at] {email.domain}
+          </a>
+        )
+      }
+      <nav class="cv-socials" aria-label="Social links">
+        {
+          socials.map((s) => (
+            <a href={s.url} target="_blank" rel="noopener noreferrer">
+              {s.label.replace(/^\//, '')}
+            </a>
+          ))
+        }
+      </nav>
+      <p class="cv-copyright">© {year} Riccardo Canella</p>
+    </footer>
   </div>
 </section>
 
@@ -117,7 +149,7 @@ const sub = (e: CVEntry) => [e.role, period(e)].filter(Boolean).join(' · ')
   /* ─── with the diamond: pinned section, the tower builds on the right ── */
 
   :global(.has-diamond) .cv {
-    height: calc(100vh + var(--count) * 40vh);
+    height: calc(100vh + var(--count) * 45vh + 60vh);
     padding: 0;
   }
 
@@ -207,5 +239,119 @@ const sub = (e: CVEntry) => [e.role, period(e)].filter(Boolean).join(' · ')
 
   :global(.has-diamond) .cv-copy .more {
     margin: 2rem 0 0;
+  }
+
+  /* ─── closing words ───────────────────────────────────────────────────── */
+
+  .cv-outro {
+    max-width: 460px;
+    margin: 18vh auto 0;
+  }
+
+  .cv-outro .eyebrow {
+    margin-bottom: 0.6rem;
+  }
+
+  .cv-outro h2 {
+    font-size: clamp(2.6rem, 6vw, 4.2rem);
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  .cv-mail {
+    display: inline-block;
+    margin-top: 1.4rem;
+    font-family: 'Archivo Black', 'Arial Black', sans-serif;
+    font-size: clamp(1rem, 1.9vw, 1.45rem);
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+    border-bottom: 2px solid currentColor;
+    padding-bottom: 2px;
+  }
+
+  .cv-socials {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.1rem;
+    margin-top: 1.8rem;
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+  }
+
+  .cv-socials a {
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s;
+  }
+
+  .cv-socials a:hover,
+  .cv-socials a:focus-visible {
+    border-bottom-color: currentColor;
+  }
+
+  .cv-copyright {
+    margin-top: 2.4rem;
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    opacity: 0.5;
+  }
+
+  /* With the tower: the list gives way to the closing words. */
+  :global(.has-diamond) .cv-copy,
+  :global(.has-diamond) .cv-outro {
+    transition:
+      opacity 0.6s ease,
+      visibility 0s linear 0.6s;
+  }
+
+  :global(.has-diamond) .cv-outro {
+    position: absolute;
+    top: 50%;
+    left: max(24px, 8vw);
+    width: min(30vw, 420px);
+    margin: 0;
+    transform: translateY(-50%);
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  :global(.has-diamond) .cv.is-outro .cv-copy {
+    opacity: 0;
+    visibility: hidden;
+  }
+
+  :global(.has-diamond) .cv.is-outro .cv-outro {
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity 0.6s ease 0.2s,
+      visibility 0s;
+  }
+
+  @media (max-aspect-ratio: 23/20) {
+    :global(.has-diamond) .cv-outro {
+      top: auto;
+      bottom: max(5vh, 24px);
+      left: 24px;
+      right: 24px;
+      width: auto;
+      transform: none;
+    }
+
+    :global(.has-diamond) .cv-outro h2 {
+      font-size: 2.2rem;
+    }
+
+    :global(.has-diamond) .cv-mail {
+      margin-top: 0.8rem;
+    }
+
+    :global(.has-diamond) .cv-socials {
+      margin-top: 1rem;
+    }
+
+    :global(.has-diamond) .cv-copyright {
+      margin-top: 1rem;
+    }
   }
 </style>

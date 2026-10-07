@@ -87,8 +87,13 @@ a {
   pointer-events: none;
 }
 
-.pastel canvas {
+.pastel img {
   position: absolute;
+  max-width: none;
+  /* Before the JS layout runs: cover the screen. */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 #scroll {
@@ -119,6 +124,15 @@ a {
   );
 }
 
+/* While loading: no scrolling, the diamond waits to fade in. */
+.is-loading #scroll {
+  overflow: hidden;
+}
+
+.is-loading #diamond {
+  opacity: 0;
+}
+
 #holo,
 #diamond {
   position: fixed;
@@ -128,6 +142,7 @@ a {
   height: 100vh;
   height: 100dvh;
   pointer-events: none;
+  transition: opacity 1.2s ease 0.2s;
 }
 
 /* Under the content, above the pastel. */
@@ -150,8 +165,13 @@ a {
   opacity: 0;
 }
 
+/* Reached while scrolling fast: shown at once, no animation. */
+.can-reveal .is-shown [data-reveal] {
+  opacity: 1;
+}
+
 .can-reveal .is-revealed [data-reveal] {
-  animation: reveal 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms) both;
+  animation: reveal 0.35s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms) both;
 }
 
 @keyframes reveal {

@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import type { StageState } from '../stage/state'
 import { HOLO_GLSL } from '../diamond/holo'
 import { holoState, TILT_PERSPECTIVE } from './registry'
+import { canvasPixelRatio } from '../stage/pixelRatio'
 
 // Holographic surfaces drawn under DOM elements marked [data-holo], on a
 // canvas that sits between the background and the content. Each surface is
@@ -116,7 +117,7 @@ export async function createHoloSurfaces(canvas: HTMLCanvasElement, { reducedMot
   const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
   renderer.outputColorSpace = THREE.LinearSRGBColorSpace
   renderer.setClearColor(0x000000, 0)
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+  renderer.setPixelRatio(canvasPixelRatio())
 
   const scene = new THREE.Scene()
   const camera = new THREE.Camera() // unused: the vertex shader works in CSS px
@@ -172,6 +173,8 @@ export async function createHoloSurfaces(canvas: HTMLCanvasElement, { reducedMot
 
   function frame() {
     requestAnimationFrame(frame)
+    // Nothing to draw on the pastel intro: skip the per-surface layout reads.
+    if (opacity <= 0.001 && !drawn) return
     const t = reducedMotion ? 2 : clock.getElapsedTime()
 
     let any = false

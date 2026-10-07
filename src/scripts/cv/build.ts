@@ -1,8 +1,12 @@
 // Timing of the CV tower, shared by the WebGL tower and the DOM list so the
 // two always agree. `build` is the progress through the pinned CV section.
 
-/** Slabs land during [0, BUILD_END]; the rest is the final quarter turn. */
-export const BUILD_END = 0.8
+/** Slabs land during [0, BUILD_END], the tower turns until TURN_END. */
+export const BUILD_END = 0.72
+export const TURN_END = 0.88
+
+/** From here the list gives way to the closing words (contacts). */
+export const OUTRO = 0.9
 
 /** A slab counts as landed (and its entry lights up) past this progress. */
 export const LANDED = 0.6
@@ -14,4 +18,4 @@ export const slabProgress = (build: number, k: number, n: number) =>
   clamp01((build / BUILD_END) * n - k)
 
 /** 0 → 1 during the final turn of the finished tower. */
-export const turnProgress = (build: number) => clamp01((build - BUILD_END) / (1 - BUILD_END))
+export const turnProgress = (build: number) => clamp01((build - BUILD_END) / (TURN_END - BUILD_END))

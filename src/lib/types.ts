@@ -2,6 +2,8 @@ export interface HeroData {
   name: string
   tagline: string
   bullets: string[]
+  /** Contact address, written "user[at]domain" in the README. */
+  email?: { user: string; domain: string }
 }
 
 export interface SocialLink {
