@@ -109,6 +109,7 @@ const speed = (title: string) => `--dur: ${Math.round(title.length * 1.1)}s`
                 target="_blank"
                 rel="noopener noreferrer"
                 class="read"
+                data-cursor="read article"
                 data-article-read
                 aria-label={`Read “${posts[0].title}”`}
               >
@@ -123,7 +124,13 @@ const speed = (title: string) => `--dur: ${Math.round(title.length * 1.1)}s`
 
   {
     moreUrl && (
-      <a href={moreUrl} target="_blank" rel="noopener noreferrer" class="all-articles">
+      <a
+        href={moreUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="all-articles"
+        data-cursor="all articles"
+      >
         <span class="all-articles-label">all articles</span>
         <span class="all-articles-track" aria-hidden="true">
           {[0, 1].map(() => (

@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css'
 import SectionNav from '../components/ui/SectionNav.astro'
+import Cursor from '../components/ui/Cursor.astro'
 
 interface Props {
   title?: string
@@ -88,6 +89,8 @@ const {
     <canvas id="diamond" aria-hidden="true"></canvas>
 
     <SectionNav />
+
+    <Cursor />
 
     <script>
       import '../scripts/stage/index'

@@ -1,0 +1,170 @@
+---
+// Custom cursor: a small diamond that wears the big diamond's skin of the
+// current section, and opens into a frame with an orbiting ticker of the
+// action on links. Driven by src/scripts/cursor; only armed (.has-cursor)
+// on fine pointers without reduced motion.
+---
+
+<div class="cursor" data-cursor-dot data-skin="intro" aria-hidden="true">
+  <span class="cursor-diamond"></span>
+</div>
+
+<div class="cursor-ring" data-cursor-ring aria-hidden="true">
+  <svg viewBox="0 0 100 100">
+    <defs>
+      <path id="cursor-ring-path" d="M50,50 m-38,0 a38,38 0 1,1 76,0 a38,38 0 1,1 -76,0"></path>
+    </defs>
+    <text>
+      <textPath href="#cursor-ring-path" textLength="238" lengthAdjust="spacing" data-cursor-label
+      ></textPath>
+    </text>
+  </svg>
+</div>
+
+<style>
+  @property --cursor-hue {
+    syntax: '<angle>';
+    inherits: false;
+    initial-value: 0deg;
+  }
+
+  .cursor,
+  .cursor-ring {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.25s;
+    will-change: transform;
+  }
+
+  :global(.has-cursor) .cursor,
+  :global(.has-cursor) .cursor-ring {
+    display: block;
+  }
+
+  :global(.has-cursor) .cursor.is-visible,
+  :global(.has-cursor) .cursor-ring.is-visible {
+    opacity: 1;
+  }
+
+  .cursor {
+    z-index: 20;
+  }
+
+  /* ─── the diamond and its skins ───────────────────────────────────────── */
+
+  .cursor-diamond {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    margin: -7px 0 0 -7px;
+    background: #f5f4f0;
+    border: 1px solid #2a2430;
+    transform: rotate(45deg) scale(1);
+    transition:
+      transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1),
+      background-color 0.3s,
+      border-color 0.3s,
+      border-width 0.3s;
+  }
+
+  /* what i code: iridescent, cycling through the holo palette */
+  .cursor[data-skin='holo'] .cursor-diamond {
+    border: 0;
+    background: conic-gradient(from var(--cursor-hue), #40a6ff, #b359ff, #ffcc59, #4dffa6, #40a6ff);
+    animation: cursor-hue 3s linear infinite;
+  }
+
+  /* what i write: the empty frame */
+  .cursor[data-skin='frame'] .cursor-diamond {
+    background: transparent;
+    border: 3px solid #f5f4f0;
+  }
+
+  /* my cv: white, like the tower */
+  .cursor[data-skin='cv'] .cursor-diamond {
+    border-color: transparent;
+  }
+
+  @keyframes cursor-hue {
+    to {
+      --cursor-hue: 360deg;
+    }
+  }
+
+  /* ─── on links: the diamond opens into a frame ────────────────────────── */
+
+  .cursor.is-hover .cursor-diamond {
+    background: transparent;
+    border: 1px solid #f5f4f0;
+    transform: rotate(0deg) scale(2.6);
+  }
+
+  .cursor[data-skin='intro'].is-hover .cursor-diamond {
+    border-color: #2a2430;
+  }
+
+  .cursor[data-skin='holo'].is-hover .cursor-diamond {
+    padding: 1px;
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask-composite: exclude;
+  }
+
+  /* ─── the orbiting ticker (auto contrast with what's below) ───────────── */
+
+  .cursor-ring {
+    z-index: 19;
+    mix-blend-mode: difference;
+  }
+
+  .cursor-ring svg {
+    position: absolute;
+    width: 96px;
+    height: 96px;
+    margin: -48px 0 0 -48px;
+    overflow: visible;
+    transform: scale(0.5) rotate(-90deg);
+    opacity: 0;
+    transition:
+      transform 0.45s cubic-bezier(0.2, 0.7, 0.2, 1),
+      opacity 0.25s;
+  }
+
+  .cursor-ring.is-hover svg {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+
+  .cursor-ring text {
+    fill: #fff;
+    font-family: 'Archivo Black', 'Arial Black', sans-serif;
+    font-size: 9.5px;
+    text-transform: uppercase;
+  }
+
+  .cursor-ring.is-hover text {
+    animation: cursor-orbit 9s linear infinite;
+    transform-origin: 50px 50px;
+  }
+
+  @keyframes cursor-orbit {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* The real cursor gives way to ours. */
+  :global(.has-cursor),
+  :global(.has-cursor) * {
+    cursor: none !important;
+  }
+</style>

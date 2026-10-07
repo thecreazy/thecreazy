@@ -3,6 +3,7 @@ import { paintPastel, layoutPastel } from './pastel'
 import { initWorks } from '../works'
 import { initArticles } from '../articles'
 import { initCv } from '../cv'
+import { initCursor } from '../cursor'
 
 const scroller = document.getElementById('scroll')
 const pastel = document.getElementById('pastel-canvas') as HTMLCanvasElement | null
@@ -55,6 +56,9 @@ if (scroller && sections.length === 4) {
 
   // My cv: the list follows the tower.
   initCv(stage)
+
+  // Custom cursor (fine pointers only).
+  initCursor(stage, reducedMotion)
 
   // WebGL layers: separate chunks, loaded after everything else. Without
   // WebGL the diamond and the holo surfaces simply aren't there and the page
