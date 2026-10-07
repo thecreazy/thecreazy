@@ -6,6 +6,7 @@ function stripEmoji(text: string): string {
   return text
     .replace(/[\u{1F300}-\u{1FFFF}]/gu, '')
     .replace(/[\u2600-\u27BF]/gu, '')
+    .replace(/\u200D|\uFE0F/gu, '') // ZWJ / variation selectors left by composed emoji
     .replace(/\s+/g, ' ')
     .trim()
 }

@@ -7,7 +7,6 @@ export default defineConfig({
   integrations: [tailwind(), sitemap()],
   output: 'static',
   vite: {
-    assetsInclude: ['**/*.glsl'],
     build: {
       target: 'es2020',
     },

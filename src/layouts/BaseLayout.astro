@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css'
+import SectionNav from '../components/ui/SectionNav.astro'
 
 interface Props {
   title?: string
@@ -13,12 +14,13 @@ const {
 ---
 
 <!doctype html>
-<html lang="en" data-theme="dark">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
     <meta name="description" content={description} />
     <meta name="author" content="Riccardo Canella" />
+    <meta name="theme-color" content="#0a0a0c" />
 
     <!-- OG -->
     <meta property="og:title" content={title} />
@@ -36,14 +38,14 @@ const {
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=optional"
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap"
       media="print"
       onload="this.media='all'"
     />
     <noscript
       ><link
         rel="stylesheet"
-        href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&family=IBM+Plex+Mono:ital,wght@0,400;0,500;1,400&display=optional"
+        href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Courier+Prime:ital,wght@0,400;0,700;1,400&family=Instrument+Serif:ital@0;1&display=swap"
       /></noscript
     >
 
@@ -58,8 +60,8 @@ const {
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-QEZ5WE0ZJR"></script>
     <script is:inline>
       window.dataLayer = window.dataLayer || []
-      // eslint-disable-next-line prefer-rest-params
       function gtag() {
+        // eslint-disable-next-line prefer-rest-params
         dataLayer.push(arguments)
       }
       gtag('js', new Date())
@@ -69,165 +71,23 @@ const {
     <title>{title}</title>
   </head>
   <body>
-    <!-- WebGL canvas (loaded async, non-blocking) -->
-    <canvas id="webgl-canvas" aria-hidden="true"></canvas>
-
-    <!-- Synthwave perspective grid -->
-    <div class="synthwave-grid" aria-hidden="true">
-      <div class="synthwave-grid__plane"></div>
+    <!-- Pastel watercolour of the intro, fades into the night background -->
+    <div class="pastel" aria-hidden="true">
+      <canvas id="pastel-canvas"></canvas>
     </div>
 
-    <!-- CRT scanlines -->
-    <div class="scanlines" aria-hidden="true"></div>
-
-    <!-- Custom cursor -->
-    <div class="cursor" id="cursor" aria-hidden="true"></div>
-
-    <!-- Main content -->
-    <div id="content">
+    <!-- Scrolling content -->
+    <div id="scroll">
       <slot />
     </div>
 
-    <!-- Cursor script (inline, tiny) -->
-    <script is:inline>
-      const cursor = document.getElementById('cursor')
-      let mx = -100, my = -100
-      let headingEl = null
+    <!-- The diamond (WebGL, loaded async) -->
+    <canvas id="diamond" aria-hidden="true"></canvas>
 
-      document.addEventListener('mousemove', (e) => {
-        mx = e.clientX
-        my = e.clientY
-        if (!headingEl) {
-          cursor.style.left = mx + 'px'
-          cursor.style.top = my + 'px'
-        }
-      })
-      document.addEventListener('mouseleave', () => { cursor.style.opacity = '0' })
-      document.addEventListener('mouseenter', () => { cursor.style.opacity = '1' })
+    <SectionNav />
 
-      document.addEventListener('mouseover', (e) => {
-        if (e.target.closest('a, button, [role="button"]')) {
-          cursor.classList.add('is-hovering')
-        }
-        const h = e.target.closest('.section-title, h1, h2, h3')
-        if (h && !headingEl) {
-          headingEl = h
-          const r = h.getBoundingClientRect()
-          cursor.classList.add('is-heading')
-          cursor.style.width = r.width + 'px'
-          cursor.style.left = (r.left + r.width / 2) + 'px'
-          cursor.style.top = (r.bottom + 4) + 'px'
-        }
-      })
-      document.addEventListener('mouseout', (e) => {
-        if (e.target.closest('a, button, [role="button"]')) {
-          cursor.classList.remove('is-hovering')
-        }
-        const h = e.target.closest('.section-title, h1, h2, h3')
-        // relatedTarget check avoids false triggers when moving between children
-        if (h && !h.contains(e.relatedTarget)) {
-          headingEl = null
-          cursor.classList.remove('is-heading')
-          cursor.style.width = ''
-          cursor.style.left = mx + 'px'
-          cursor.style.top = my + 'px'
-        }
-      })
-    </script>
-
-    <!-- Cursor trail (async, non-blocking) -->
     <script>
-      async function initTrail() {
-        const { initCursorTrail } = await import('../scripts/cursorTrail.ts')
-        initCursorTrail()
-      }
-      if (document.readyState === 'complete') {
-        initTrail()
-      } else {
-        window.addEventListener('load', initTrail)
-      }
-    </script>
-
-    <!-- WebGL loader (fully async, non-blocking, separate chunk) -->
-    <script>
-      async function initWebGL() {
-        try {
-          const canvas = document.getElementById('webgl-canvas') as HTMLCanvasElement
-          if (!canvas) return
-          const { WebGLScene } = await import('../scripts/webgl/scene.ts')
-          new WebGLScene(canvas)
-        } catch (e) {
-          // WebGL not available, site works fine without it
-          console.warn('WebGL not available:', e)
-        }
-      }
-
-      // Load after everything else
-      if (document.readyState === 'complete') {
-        setTimeout(initWebGL, 100)
-      } else {
-        window.addEventListener('load', () => setTimeout(initWebGL, 100))
-      }
-    </script>
-
-    <!-- Section reveal on scroll -->
-    <script is:inline>
-      const observer = new IntersectionObserver(
-        (entries) =>
-          entries.forEach((e) => {
-            if (e.isIntersecting) {
-              e.target.classList.add('visible')
-              observer.unobserve(e.target)
-            }
-          }),
-        { threshold: 0.1 }
-      )
-      document.querySelectorAll('.reveal').forEach((el) => observer.observe(el))
-    </script>
-
-    <!-- Konami code → manga mode easter egg (pure inline, zero bundle cost) -->
-    <script>
-      import('../scripts/mangaMode.ts').then(() => {}) // pre-warm the chunk after load
-
-      const KONAMI = [
-        'ArrowUp',
-        'ArrowUp',
-        'ArrowDown',
-        'ArrowDown',
-        'ArrowLeft',
-        'ArrowRight',
-        'ArrowLeft',
-        'ArrowRight',
-        'b',
-        'a',
-      ]
-      let idx = 0
-      let active = false
-      let busy = false
-
-      document.addEventListener('keydown', async (e) => {
-        if (e.key !== KONAMI[idx]) {
-          idx = 0
-          return
-        }
-        idx++
-        if (idx < KONAMI.length) return
-        idx = 0
-
-        if (busy) return
-        busy = true
-
-        const { activate, deactivate } = await import('../scripts/mangaMode.ts')
-        if (active) {
-          deactivate()
-          active = false
-        } else {
-          await activate()
-          active = true
-        }
-
-        busy = false
-      })
+      import '../scripts/stage/index'
     </script>
   </body>
 </html>
