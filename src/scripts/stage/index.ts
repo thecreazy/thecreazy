@@ -26,10 +26,27 @@ if (scroller && sections.length === 4) {
     })
   })
 
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+  // Entrance of [data-reveal-group] blocks, once, when they scroll into view.
+  if (!reducedMotion) {
+    const groups = document.querySelectorAll<HTMLElement>('[data-reveal-group]')
+    const observer = new IntersectionObserver(
+      (entries) =>
+        entries.forEach((e) => {
+          if (!e.isIntersecting) return
+          e.target.classList.add('is-revealed')
+          observer.unobserve(e.target)
+        }),
+      { root: scroller, threshold: 0.2 }
+    )
+    groups.forEach((g) => observer.observe(g))
+    document.documentElement.classList.add('can-reveal')
+  }
+
   // WebGL diamond: separate chunk, loaded after everything else. Without
   // WebGL the diamond simply isn't there and the page works as is.
   const canvas = document.getElementById('diamond') as HTMLCanvasElement | null
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   async function initDiamond() {
     if (!canvas) return

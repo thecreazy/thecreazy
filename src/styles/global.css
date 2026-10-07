@@ -54,9 +54,14 @@ a {
   text-decoration: none;
 }
 
+/* Soft highlighter: lavender on the pastel intro, deep violet at night. */
 ::selection {
-  background: var(--fg);
-  color: var(--night);
+  background: color-mix(
+    in srgb,
+    rgba(196, 168, 240, 0.55) calc(var(--intro) * 100%),
+    rgba(140, 104, 240, 0.6)
+  );
+  color: var(--fg);
 }
 
 :focus-visible {
@@ -120,6 +125,32 @@ a {
 @media (prefers-reduced-motion: reduce) {
   #scroll {
     scroll-behavior: auto;
+  }
+}
+
+/* ─── entrance ─────────────────────────────────────────────────────────────── */
+
+/* Elements marked [data-reveal] inside a [data-reveal-group] stay hidden
+   until the group scrolls into view, then snap in from a blur, each after
+   its own --d delay. Only armed by JS (.can-reveal), never with reduced motion. */
+.can-reveal [data-reveal] {
+  opacity: 0;
+}
+
+.can-reveal .is-revealed [data-reveal] {
+  animation: reveal 0.55s cubic-bezier(0.2, 0.7, 0.2, 1) var(--d, 0ms) both;
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(0.3em);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: none;
   }
 }
 

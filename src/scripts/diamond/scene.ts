@@ -15,6 +15,8 @@ const LIGHT = Math.PI
 
 const BREATH_PERIOD = 4.5
 const TOP_MARGIN_PX = 10
+// Size on the intro, relative to the parked size it grows back to while rising.
+const INTRO_SCALE = 0.72
 const VEIL_GAP_PX = 24
 
 interface Options {
@@ -115,6 +117,7 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
   // Screen-plane spin for the exit lives on an outer group: the mesh's own
   // axes are already tilted by its Y rotation.
   const spinGroup = new THREE.Group()
+  spinGroup.scale.setScalar(INTRO_SCALE)
   spinGroup.add(mesh)
   scene.add(spinGroup)
 
@@ -134,7 +137,9 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
   // that fades the scrolling content away beneath it.
   function measureVeil() {
     const saved = spinGroup.position.y
+    const savedScale = spinGroup.scale.x
     spinGroup.position.y = topTargetY()
+    spinGroup.scale.setScalar(1)
     spinGroup.updateMatrixWorld(true)
     camera.updateMatrixWorld()
     const o = (SIDE / 2) * 1.06
@@ -147,6 +152,7 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
           bottom = Math.max(bottom, ((1 - v.y) / 2) * viewH)
         }
     spinGroup.position.y = saved
+    spinGroup.scale.setScalar(savedScale)
     document.documentElement.style.setProperty('--veil-h', `${Math.round(bottom + VEIL_GAP_PX)}px`)
   }
 
@@ -173,6 +179,7 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
     const { holo: holoT, frame: frameT, cv: cvT, exit: exitT } = st
 
     spinGroup.position.y = st.move * topTargetY()
+    spinGroup.scale.setScalar(INTRO_SCALE + (1 - INTRO_SCALE) * st.move)
 
     // intro → holographic
     holoMesh.visible = holoT > 0.001
