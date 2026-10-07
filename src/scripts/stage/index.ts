@@ -2,6 +2,7 @@ import { createStage } from './state'
 import { paintPastel, layoutPastel } from './pastel'
 import { initWorks } from '../works'
 import { initArticles } from '../articles'
+import { initCv } from '../cv'
 
 const scroller = document.getElementById('scroll')
 const pastel = document.getElementById('pastel-canvas') as HTMLCanvasElement | null
@@ -52,6 +53,9 @@ if (scroller && sections.length === 4) {
   // What i write: pinned stage, articles crossfade with the scroll.
   initArticles(stage)
 
+  // My cv: the list follows the tower.
+  initCv(stage)
+
   // WebGL layers: separate chunks, loaded after everything else. Without
   // WebGL the diamond and the holo surfaces simply aren't there and the page
   // works as is.
@@ -65,6 +69,8 @@ if (scroller && sections.length === 4) {
       const diamond = await createDiamond(diamondCanvas, { reducedMotion })
       stage.subscribe(diamond.update)
       document.documentElement.classList.add('has-diamond')
+      // The CV section becomes a pinned track: positions changed.
+      stage.refresh()
     } catch (e) {
       diamondCanvas.remove()
       console.warn('WebGL not available:', e)

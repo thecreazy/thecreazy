@@ -28,91 +28,95 @@ const speed = (title: string) => `--dur: ${Math.round(title.length * 1.1)}s`
 ---
 
 <section id="blog" class="writing">
-  <header class="section-head writing-head">
-    <p class="eyebrow">what i write</p>
-    <h2>Latest <em>articles</em></h2>
-  </header>
+  <!-- Heading + track share a wrapper: the heading stays pinned inside the
+       diamond's opening for as long as the articles are pinned below it. -->
+  <div class="writing-pinned">
+    <header class="section-head writing-head">
+      <p class="eyebrow">what i write</p>
+      <h2>Latest <em>articles</em></h2>
+    </header>
 
-  <!-- Tall track: while it scrolls by, the stage stays pinned and the
+    <!-- Tall track: while it scrolls by, the stage stays pinned and the
        articles crossfade one per step. -->
-  <div class="writing-track" data-articles-track style={`--count: ${articles.length}`}>
-    <div class="stage" data-articles data-current={posts[0]?.title}>
-      <div class="frames">
-        {
-          articles.map(({ post, cover, tones }, i) => (
-            <div
-              class:list={['article', { 'is-active': i === 0 }]}
-              data-article
-              data-title={post.title}
-              data-url={post.url}
-              aria-hidden={i !== 0 ? 'true' : undefined}
-            >
-              {cover ? (
-                <Image
-                  src={cover.image}
-                  alt=""
-                  widths={[640, 960, 1280, 1920]}
-                  sizes="(max-width: 640px) 92vw, 1000px"
-                  class="article-img"
-                  loading={i === 0 ? 'eager' : 'lazy'}
-                />
-              ) : (
-                <span class="article-img article-img--empty" />
-              )}
-
-              {(['top', 'bottom', 'left', 'right'] as const).map((side) => (
-                <span class={`ticker ticker--${side} is-${tones[side]}`} aria-hidden="true">
-                  <span class="ticker-track" style={speed(post.title)}>
-                    <span>{run(post.title)}</span>
-                    <span>{run(post.title)}</span>
-                  </span>
-                </span>
-              ))}
-
-              <p class={`article-meta is-${tones.top}`}>
-                <span class="article-title">{post.title}</span>
-                <span>
-                  {post.year} · {host(post.url)}
-                </span>
-                <span aria-hidden="true">
-                  {pad(i + 1)} / {pad(articles.length)}
-                </span>
-              </p>
-            </div>
-          ))
-        }
-      </div>
-
-      <div class="stage-foot">
-        <div class="article-steps" aria-hidden="true">
+    <div class="writing-track" data-articles-track style={`--count: ${articles.length}`}>
+      <div class="stage" data-articles data-current={posts[0]?.title}>
+        <div class="frames">
           {
-            articles.map((_, i) => (
-              <span
-                class="article-step"
-                data-article-step
-                aria-current={i === 0 ? 'true' : undefined}
+            articles.map(({ post, cover, tones }, i) => (
+              <div
+                class:list={['article', { 'is-active': i === 0 }]}
+                data-article
+                data-title={post.title}
+                data-url={post.url}
+                aria-hidden={i !== 0 ? 'true' : undefined}
               >
-                <span>{pad(i + 1)}</span>
-                <span class="article-step-bar" />
-              </span>
+                {cover ? (
+                  <Image
+                    src={cover.image}
+                    alt=""
+                    widths={[640, 960, 1280, 1920]}
+                    sizes="(max-width: 640px) 92vw, 1000px"
+                    class="article-img"
+                    loading={i === 0 ? 'eager' : 'lazy'}
+                  />
+                ) : (
+                  <span class="article-img article-img--empty" />
+                )}
+
+                {(['top', 'bottom', 'left', 'right'] as const).map((side) => (
+                  <span class={`ticker ticker--${side} is-${tones[side]}`} aria-hidden="true">
+                    <span class="ticker-track" style={speed(post.title)}>
+                      <span>{run(post.title)}</span>
+                      <span>{run(post.title)}</span>
+                    </span>
+                  </span>
+                ))}
+
+                <p class={`article-meta is-${tones.top}`}>
+                  <span class="article-title">{post.title}</span>
+                  <span>
+                    {post.year} · {host(post.url)}
+                  </span>
+                  <span aria-hidden="true">
+                    {pad(i + 1)} / {pad(articles.length)}
+                  </span>
+                </p>
+              </div>
             ))
           }
         </div>
 
-        {
-          posts[0] && (
-            <a
-              href={posts[0].url}
-              target="_blank"
-              rel="noopener noreferrer"
-              class="read"
-              data-article-read
-              aria-label={`Read “${posts[0].title}”`}
-            >
-              read article <span aria-hidden="true">→</span>
-            </a>
-          )
-        }
+        <div class="stage-foot">
+          <div class="article-steps" aria-hidden="true">
+            {
+              articles.map((_, i) => (
+                <span
+                  class="article-step"
+                  data-article-step
+                  aria-current={i === 0 ? 'true' : undefined}
+                >
+                  <span>{pad(i + 1)}</span>
+                  <span class="article-step-bar" />
+                </span>
+              ))
+            }
+          </div>
+
+          {
+            posts[0] && (
+              <a
+                href={posts[0].url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="read"
+                data-article-read
+                aria-label={`Read “${posts[0].title}”`}
+              >
+                read article <span aria-hidden="true">→</span>
+              </a>
+            )
+          }
+        </div>
       </div>
     </div>
   </div>
@@ -136,10 +140,33 @@ const speed = (title: string) => `--dur: ${Math.round(title.length * 1.1)}s`
     padding: 0 max(16px, 6vw) 18vh;
   }
 
-  .writing-head {
+  .writing-pinned {
     padding-top: calc(var(--veil-h) + 8vh);
-    margin-bottom: 0;
-    padding-bottom: 12vh;
+  }
+
+  .writing-head {
+    margin-bottom: 12vh;
+  }
+
+  /* With the diamond: the heading scrolls up behind the frame and stops in
+     its opening (--hole-*, measured by the diamond), sized to fit. */
+  :global(.has-diamond) .writing-head {
+    position: sticky;
+    top: var(--hole-y);
+    z-index: 1;
+    width: calc(var(--hole-w) * 0.62);
+    margin: 0 auto 12vh;
+    transform: translateY(-50%);
+  }
+
+  :global(.has-diamond) .writing-head .eyebrow {
+    margin-bottom: 0.3rem;
+    font-size: clamp(0.6rem, calc(var(--hole-w) * 0.022), 0.8rem);
+  }
+
+  :global(.has-diamond) .writing-head h2 {
+    font-size: clamp(1rem, calc(var(--hole-w) * 0.085), 3.4rem);
+    white-space: nowrap;
   }
 
   /* One viewport to pin + ~45vh of scroll per article. */

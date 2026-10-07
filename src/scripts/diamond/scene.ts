@@ -4,10 +4,12 @@ import { SIDE, HEIGHT, texWhite, texWord, texFrameBand } from './textures'
 import { createHoloMaterial } from './holo'
 import { buildFrame } from './frame'
 import type { ArticleChange } from '../articles'
+import { buildTower } from './tower'
+import { turnProgress } from '../cv/build'
 
 // The diamond: a white slab with the name ticking along its sides that
 // changes skin section by section (intro → holographic → empty frame →
-// white again) and finally spins, grows and dissolves before the CV.
+// white again) and finally becomes the cap of the CV tower.
 
 // The original prototype ran on three r128 with no colour management and
 // legacy lights: reproduce that look on modern three.
@@ -19,6 +21,11 @@ const TOP_MARGIN_PX = 10
 // Size on the intro, relative to the parked size it grows back to while rising.
 const INTRO_SCALE = 0.72
 const VEIL_GAP_PX = 24
+// Where the bottom of the CV tower sits, in NDC (-1 = bottom edge).
+const TOWER_BOTTOM_NDC = -0.72
+const TOWER_BOTTOM_NDC_NARROW = -0.38
+// On wide screens the tower moves right, leaving room for the CV list.
+const TOWER_SHIFT = 0.14
 
 interface Options {
   reducedMotion: boolean
@@ -75,8 +82,9 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
   const introSkins = [matWhite, matRiccardo, matCanella]
 
   // BoxGeometry face order: [+X, -X, +Y, -Y, +Z, -Z].
-  // -X is the visible face on the left, +Z the one on the right.
-  const introFaces = [matWhite, matRiccardo, matWhite, matWhite, matCanella, matWhite]
+  // -X is the visible face on the left, +Z the one on the right; the name is
+  // also on the opposite faces so it stays readable when the CV tower turns.
+  const introFaces = [matRiccardo, matRiccardo, matWhite, matWhite, matCanella, matCanella]
   const hidden = new THREE.MeshBasicMaterial({ visible: false })
   const hiddenFaces = Array(6).fill(hidden)
 
@@ -129,11 +137,21 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
   frame.group.visible = false
   mesh.add(frame.group)
 
-  // Screen-plane spin for the exit lives on an outer group: the mesh's own
-  // axes are already tilted by its Y rotation.
+  // ─── CV tower, hanging under the diamond ─────────────────────────────────
+  const tower = buildTower(
+    [...document.querySelectorAll<HTMLElement>('[data-cv-entry]')].map((el) => ({
+      company: el.dataset.company ?? '',
+      period: el.dataset.period ?? '',
+    })),
+    TEX_WHITE,
+    skin
+  )
+
+  // Outer group: position, scale and the tower's final turn apply to the
+  // diamond and the tower together.
   const spinGroup = new THREE.Group()
   spinGroup.scale.setScalar(INTRO_SCALE)
-  spinGroup.add(mesh)
+  spinGroup.add(mesh, tower.group)
   scene.add(spinGroup)
 
   // ─── layout ──────────────────────────────────────────────────────────────
@@ -148,27 +166,81 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
     return visible / 2 - TOP_MARGIN_PX * (visible / viewH) - SIDE * 0.35
   }
 
-  // Bottom edge (px) of the diamond once parked at the top: drives the mask
-  // that fades the scrolling content away beneath it.
-  function measureVeil() {
-    const saved = spinGroup.position.y
-    const savedScale = spinGroup.scale.x
-    spinGroup.position.y = topTargetY()
+  // Screen geometry of the diamond once parked at the top, written as CSS
+  // variables: --veil-h (bottom edge, drives the mask that fades content
+  // beneath it) and --hole-* (the opening of the frame skin, where the
+  // what i write heading sits).
+  function measureParked() {
+    const saved = { y: spinGroup.position.y, x: spinGroup.position.x, s: spinGroup.scale.x }
+    const savedRot = { spin: spinGroup.rotation.y, mesh: mesh.rotation.y }
+    spinGroup.position.set(0, topTargetY(), 0)
     spinGroup.scale.setScalar(1)
+    spinGroup.rotation.y = 0
+    mesh.rotation.y = Math.PI / 4
     spinGroup.updateMatrixWorld(true)
     camera.updateMatrixWorld()
-    const o = (SIDE / 2) * 1.06
+
     const v = new THREE.Vector3()
+    const toPx = (lx: number, ly: number, lz: number) => {
+      mesh.localToWorld(v.set(lx, ly, lz)).project(camera)
+      return { x: ((v.x + 1) / 2) * viewW, y: ((1 - v.y) / 2) * viewH }
+    }
+
+    const o = (SIDE / 2) * 1.06
     let bottom = 0
     for (const cx of [-o, o])
       for (const cy of [-y, y])
-        for (const cz of [-o, o]) {
-          mesh.localToWorld(v.set(cx, cy, cz)).project(camera)
-          bottom = Math.max(bottom, ((1 - v.y) / 2) * viewH)
-        }
-    spinGroup.position.y = saved
-    spinGroup.scale.setScalar(savedScale)
-    document.documentElement.style.setProperty('--veil-h', `${Math.round(bottom + VEIL_GAP_PX)}px`)
+        for (const cz of [-o, o]) bottom = Math.max(bottom, toPx(cx, cy, cz).y)
+
+    // The opening seen through the frame: intersection of the inner rims of
+    // the top and bottom faces, approximated by their common bounding box.
+    const i = o - SIDE * 0.16
+    const rim = (py: number) => {
+      const pts = [toPx(-i, py, -i), toPx(i, py, -i), toPx(i, py, i), toPx(-i, py, i)]
+      const xs = pts.map((p) => p.x)
+      const ys = pts.map((p) => p.y)
+      return { l: Math.min(...xs), r: Math.max(...xs), t: Math.min(...ys), b: Math.max(...ys) }
+    }
+    const a = rim(y)
+    const b = rim(-y)
+    const hole = {
+      l: Math.max(a.l, b.l),
+      r: Math.min(a.r, b.r),
+      t: Math.max(a.t, b.t),
+      b: Math.min(a.b, b.b),
+    }
+
+    spinGroup.position.set(saved.x, saved.y, 0)
+    spinGroup.scale.setScalar(saved.s)
+    spinGroup.rotation.y = savedRot.spin
+    mesh.rotation.y = savedRot.mesh
+
+    const css = document.documentElement.style
+    const px = (n: number) => `${Math.round(n)}px`
+    css.setProperty('--veil-h', px(bottom + VEIL_GAP_PX))
+    css.setProperty('--hole-x', px((hole.l + hole.r) / 2))
+    css.setProperty('--hole-y', px((hole.t + hole.b) / 2))
+    css.setProperty('--hole-w', px(hole.r - hole.l))
+    css.setProperty('--hole-h', px(hole.b - hole.t))
+  }
+
+  // World x of the tower on wide screens, and the vertical room it gets
+  // between the diamond and the bottom of the screen.
+  let towerShift = 0
+
+  function layoutTower() {
+    const aspect = viewW / viewH
+    const top = topTargetY()
+    const dist = camera.position.distanceTo(new THREE.Vector3(0, top, 0))
+    const visibleW = 2 * Math.tan((camera.fov * Math.PI) / 360) * dist * aspect
+    towerShift = aspect > 1.15 ? TOWER_SHIFT * visibleW : 0
+
+    // World y where the given NDC height meets the z = 0 plane.
+    // Same threshold as the CV layout in CSS (max-aspect-ratio: 23/20).
+    const ndcY = aspect <= 1.15 ? TOWER_BOTTOM_NDC_NARROW : TOWER_BOTTOM_NDC
+    const ray = new THREE.Vector3(0, ndcY, 0.5).unproject(camera).sub(camera.position)
+    const bottomY = camera.position.y + ray.y * (-camera.position.z / ray.z)
+    tower.layout(Math.max(0.5, top - HEIGHT / 2 - bottomY))
   }
 
   function fit() {
@@ -181,7 +253,9 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
     camera.fov = aspect < 1 ? 50 + (1 - aspect) * 35 : 50
     camera.updateProjectionMatrix()
     renderer.setSize(viewW, viewH, false)
-    measureVeil()
+    camera.updateMatrixWorld()
+    measureParked()
+    layoutTower()
     if (state) apply(state)
   }
 
@@ -191,9 +265,10 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
 
   function apply(st: StageState) {
     state = st
-    const { holo: holoT, frame: frameT, cv: cvT, exit: exitT } = st
+    const { holo: holoT, frame: frameT, cv: cvT } = st
 
     spinGroup.position.y = st.move * topTargetY()
+    spinGroup.position.x = cvT * towerShift
     // Quarter turn while the what i code track scrolls sideways. The skin is
     // fully holographic there (same pattern on every face, no text), so the
     // square slab looks identical at 0° and 90°: at the end of the track the
@@ -236,33 +311,22 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
       frame.edges.opacity = frameT * 0.2 * (1 - cvT)
     }
 
-    // exit: spin, grow and dissolve (fade only with reduced motion)
+    // CV: slabs drop under the diamond, then the whole tower turns.
+    tower.update(st.build, cvT, reducedMotion)
     if (!reducedMotion) {
-      spinGroup.rotation.x = exitT * Math.PI * 2.5
-      mesh.scale.setScalar(1 + exitT * exitT * 6)
+      const turn = turnProgress(st.build)
+      spinGroup.rotation.y = turn * turn * (3 - 2 * turn) * (Math.PI / 2)
     }
-    const exitOpacity = 1 - exitT
-    introSkins.forEach((m) => (m.opacity *= exitOpacity))
-    mesh.visible = exitOpacity > 0.001
 
     textWallBase = frame.textWall.opacity
   }
 
   // ─── render loop ─────────────────────────────────────────────────────────
   const clock = new THREE.Clock()
-  let drawn = false
-
   let lastNow = performance.now()
 
   function frameLoop(now = performance.now()) {
     requestAnimationFrame(frameLoop)
-    // Nothing on screen after the exit: clear once, then idle.
-    if (!mesh.visible) {
-      if (drawn) renderer.clear()
-      drawn = false
-      return
-    }
-    drawn = true
 
     const t = reducedMotion ? 2 : clock.getElapsedTime()
     holo.uniforms.uTime.value = t
@@ -277,6 +341,7 @@ export async function createDiamond(canvas: HTMLCanvasElement, { reducedMotion }
     TEX_RICCARDO.offset.x = (t * 0.08) % 1
     TEX_CANELLA.offset.x = -(t * 0.08) % 1
     band.offset.x = (t * 0.06 * band.userData.speed) % 1
+    tower.tick(t)
 
     // Title change: fade the band out, swap the texture, fade it back in.
     const dt = Math.min((now - lastNow) / 1000, 0.1)

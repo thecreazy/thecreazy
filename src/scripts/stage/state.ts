@@ -15,8 +15,8 @@ export interface StageState {
   frame: number
   /** frame → white skin (my cv). */
   cv: number
-  /** final exit: spin, grow, dissolve. */
-  exit: number
+  /** progress through the pinned CV section: the tower builds. */
+  build: number
   /** index of the section currently in view. */
   active: number
 }
@@ -60,7 +60,7 @@ export function createStage(scroller: HTMLElement, sections: HTMLElement[]) {
       works: clamp01(-projectsTop / Math.max(1, projects.offsetHeight - vh)),
       frame: ramp(blogTop, vh, 0.7, 0.3),
       cv: ramp(cvTop, vh, 0.7, 0.3),
-      exit: ramp(cvTop, vh, 0.3, 0.6),
+      build: clamp01(-cvTop / Math.max(1, cv.offsetHeight - vh)),
       active,
     }
   }
@@ -69,8 +69,10 @@ export function createStage(scroller: HTMLElement, sections: HTMLElement[]) {
     queued = false
     state = compute()
     root.style.setProperty('--intro', state.intro.toFixed(4))
-    root.style.setProperty('--veil', (state.move * (1 - state.exit)).toFixed(4))
-    root.style.setProperty('--lift', (state.frame * (1 - state.cv)).toFixed(4))
+    root.style.setProperty('--veil', state.move.toFixed(4))
+    // From what i write on, the diamond is a frame then a tower cap: content
+    // may pass behind it, so the mask is lifted.
+    root.style.setProperty('--lift', state.frame.toFixed(4))
     listeners.forEach((fn) => fn(state))
   }
 

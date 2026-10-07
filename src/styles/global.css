@@ -12,7 +12,12 @@
      --veil-h bottom edge of the parked diamond. */
   --intro: 1;
   --veil: 0;
-  --lift: 0; /* 0 → 1 while what i write is on: lowers the mask under the diamond */
+  --lift: 0; /* 0 → 1 from what i write on: removes the mask under the diamond */
+  /* Opening of the parked frame skin, measured by the diamond. */
+  --hole-x: 50vw;
+  --hole-y: 22vh;
+  --hole-w: 30vw;
+  --hole-h: 18vh;
   --veil-h: 28vh;
 
   --fg: color-mix(in srgb, var(--ink) calc(var(--intro) * 100%), var(--paper));
@@ -99,7 +104,7 @@ a {
 /* Content dissolves under the diamond once it is parked at the top. */
 .has-diamond #scroll,
 .has-diamond #holo {
-  --mask-edge: calc(var(--veil-h) * var(--veil) - var(--lift) * 12vh);
+  --mask-edge: calc(var(--veil-h) * var(--veil) * (1 - var(--lift)));
   -webkit-mask-image: linear-gradient(
     to bottom,
     transparent 0,
