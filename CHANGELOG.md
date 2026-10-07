@@ -1,5 +1,11 @@
 # thecreazy
 
+## 3.0.0
+
+### Major Changes
+
+- 53102eb: New visual identity: the diamond guides the page through intro, what i code, what i write and my cv, replacing the retro terminal theme
+
 ## 2.4.0
 
 ### Minor Changes
