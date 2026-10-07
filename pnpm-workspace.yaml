@@ -1,3 +1,12 @@
+# Single-package workspace. `packages` is required by pnpm 9 (used by the
+# Vercel build) as soon as this file exists. Settings live both here (read
+# by pnpm 10+) and in .npmrc (read by pnpm 9): keep them in sync, the
+# lockfile records them and a mismatch fails frozen installs on CI.
+packages:
+  - '.'
+
+autoInstallPeers: true
+
 allowBuilds:
-  esbuild: set this to true or false
-  sharp: set this to true or false
+  esbuild: true
+  sharp: true

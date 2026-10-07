@@ -23,6 +23,7 @@
   ],
   "author": "@thecreazy <canella_riccardo@icloud.com>",
   "license": "ISC",
+  "packageManager": "pnpm@12.10.1",
   "dependencies": {
     "@astrojs/sitemap": "~3.2.1",
     "@astrojs/tailwind": "^5.1.3",
