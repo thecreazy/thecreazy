@@ -1,5 +1,11 @@
 # thecreazy
 
+## 3.1.0
+
+### Minor Changes
+
+- 03a3b1d: Smooth wheel scrolling with Lenis: notched mouse wheels no longer make the scroll-driven diamond, projects track, articles and CV tower jump. Native scrolling is kept on touch and with reduced motion
+
 ## 3.0.1
 
 ### Patch Changes
