@@ -1,5 +1,6 @@
 import type { Stage } from '../stage/state'
 import { holoState, TILT_PERSPECTIVE } from '../holo/registry'
+import { scrollToY } from '../stage/smooth'
 
 // "What i code": the section pins to the screen and vertical scroll drives
 // a horizontal track of projects. The project closest to the centre (or
@@ -99,7 +100,7 @@ export function initWorks(stage: Stage, scroller: HTMLElement, reducedMotion: bo
     if (!el || !distance) return
     const centre = el.offsetLeft + el.offsetWidth / 2
     const p = clamp01((centre - pin.clientWidth / 2) / distance)
-    scroller.scrollTo({ top: section.offsetTop + p * distance })
+    scrollToY(scroller, section.offsetTop + p * distance)
   })
 
   // ─── per-frame easing ────────────────────────────────────────────────────

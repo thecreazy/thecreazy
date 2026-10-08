@@ -19,12 +19,12 @@
 
 ## What i code:
 
+- [Thecreazy](https://github.com/thecreazy/thecreazy) This project.
 - [YODV](https://github.com/thecreazy/year-of-data-visualization) Year of data visualization.
 - [Siteaudit](https://github.com/thecreazy/siteaudit) Siteaudit will analyze your site and generate audit for: Pagespeed, Lighthouse, A11y.
 - [Cerbero](https://github.com/thecreazy/cerbero) Cerbero is a simple js library that gives you the ability to track everything your users are doing on your web page. Furthermore, Cerbero, is designed to weigh as little as possible on the main thread by delegating the most complex computations to a webworker.
 - [FYGS](https://github.com/thecreazy/FYGS) It's time to pump your stats with FYGS! (F\*\*k your git stats)
 - [common-loggo](https://github.com/thecreazy/common-loggo) Common Loggo is an fancy log library for your browser.
-- [got-javascript-patterns](https://github.com/thecreazy/got-javascript-patterns) Javascript patterns explained using GOT.
 - [chiccocoin](https://github.com/thecreazy/chiccocoin) Blockchain in nodejs.
 - [frontend-telnet](https://github.com/jobtome-labs/frontend-telnet) Hiring project via telnet.
 

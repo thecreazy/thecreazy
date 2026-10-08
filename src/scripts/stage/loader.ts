@@ -10,6 +10,7 @@ export function createLoader(steps: string[]) {
   const el = document.querySelector<HTMLElement>('[data-loader]')
   const pct = el?.querySelector<HTMLElement>('[data-loader-pct]')
   const pending = new Set(steps)
+  const readyCallbacks: (() => void)[] = []
   let finished = false
 
   function finish() {
@@ -18,6 +19,7 @@ export function createLoader(steps: string[]) {
     if (pct) pct.textContent = '100%'
     root.classList.remove('is-loading')
     root.classList.add('is-ready')
+    readyCallbacks.forEach((fn) => fn())
     // Gone from the DOM once faded.
     setTimeout(() => el?.remove(), 1000)
   }
@@ -25,6 +27,11 @@ export function createLoader(steps: string[]) {
   setTimeout(finish, TIMEOUT)
 
   return {
+    /** Run `fn` once the loader has gone (right away if it already has). */
+    onReady(fn: () => void) {
+      if (finished) fn()
+      else readyCallbacks.push(fn)
+    },
     done(step: string) {
       if (!pending.delete(step)) return
       if (pct) pct.textContent = `${Math.round((1 - pending.size / steps.length) * 100)}%`

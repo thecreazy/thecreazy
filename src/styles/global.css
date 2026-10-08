@@ -106,6 +106,11 @@ a {
   scroll-behavior: smooth;
 }
 
+/* Lenis animates the scroll itself: native smoothing would fight it. */
+#scroll.lenis {
+  scroll-behavior: auto;
+}
+
 /* Content dissolves under the diamond once it is parked at the top. */
 .has-diamond #scroll,
 .has-diamond #holo {

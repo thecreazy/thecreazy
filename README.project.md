@@ -42,6 +42,7 @@ with an orbiting ticker naming the action on links.
 | Framework            | [Astro 4](https://astro.build) (static output)                                                                              |
 | Styling              | Scoped component CSS + global tokens (Tailwind integration only provides the base reset)                                    |
 | 3D                   | [Three.js](https://threejs.org) — diamond scene, holo shader, CV tower; lazy-loaded chunks                                  |
+| Smooth scrolling     | [Lenis](https://lenis.darkroom.engineering) — wheel input only, on the `#scroll` container                                  |
 | Images               | `astro:assets` (responsive webp) + [sharp](https://sharp.pixelplumbing.com) (cover edge tones at build time)                |
 | Fonts                | Instrument Serif, Courier Prime, Archivo Black (Google Fonts; local TTFs for the OG image)                                  |
 | OG image             | [Satori](https://github.com/vercel/satori) + [@resvg/resvg-js](https://github.com/yisibl/resvg-js)                          |
@@ -115,10 +116,10 @@ reproducible), run it on a canvas in a browser and save `canvas.toDataURL('image
 - **No JavaScript** — all content is plain HTML: no loader, normal scrolling, vertical lists.
 - **No WebGL** — no diamond or holo surfaces; sections fall back to plain layouts (the CV is a
   list followed by the closing words).
-- **Reduced motion** — no horizontal pinning (projects as a vertical list), no tilt, no tower
+- **Reduced motion** — no smooth scrolling, no horizontal pinning (projects as a vertical list), no tilt, no tower
   drops or turns, static tickers, no entrance animation, native cursor.
-- **Touch** — native cursor; nav diamonds only on the intro on phones; WebGL pixel ratio capped
-  at 1.5.
+- **Touch** — native cursor and native scrolling (no Lenis); nav diamonds only on the intro on
+  phones; WebGL pixel ratio capped at 1.5.
 - Text entrance is skipped when scrolling fast, so it never hides content.
 - `lang="en"`, OG + Twitter meta, `robots.txt`, sitemap, `site.webmanifest`.
 

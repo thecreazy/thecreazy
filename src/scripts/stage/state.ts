@@ -93,5 +93,7 @@ export function createStage(scroller: HTMLElement, sections: HTMLElement[]) {
       return () => listeners.delete(fn)
     },
     refresh: schedule,
+    /** Recompute right now (used by smooth scrolling, inside its frame). */
+    sync: update,
   }
 }

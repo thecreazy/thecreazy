@@ -1,6 +1,7 @@
 import { createStage } from './state'
 import { layoutPastel } from './pastel'
 import { createLoader } from './loader'
+import { initSmoothScroll } from './smooth'
 import { initWorks } from '../works'
 import { initArticles } from '../articles'
 import { initCv } from '../cv'
@@ -20,6 +21,13 @@ else window.addEventListener('load', () => loader.done('page'))
 
 if (scroller && sections.length === 4) {
   const stage = createStage(scroller, sections)
+
+  // Smooth wheel scrolling; held still while the loader is on.
+  const smooth = initSmoothScroll(scroller, stage.sync)
+  if (smooth) {
+    smooth.stop()
+    loader.onReady(() => smooth.start())
+  }
 
   if (pastel instanceof HTMLImageElement) {
     layoutPastel(pastel)
