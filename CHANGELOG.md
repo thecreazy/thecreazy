@@ -1,5 +1,11 @@
 # thecreazy
 
+## 3.1.1
+
+### Patch Changes
+
+- d2f8eb4: new article
+
 ## 3.1.0
 
 ### Minor Changes
