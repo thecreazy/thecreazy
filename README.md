@@ -31,6 +31,7 @@
 ## What i write:
 
 - 2026 
+  - [🔮 I’m (not) Just the Proxy Between My Boss and Claude Code](https://medium.com/@riccardocanella/im-not-just-the-proxy-between-my-boss-and-claude-code-97f7935dfa5b)
   - [🔮 How I Resurrected a Dead Library and Accidentally Built a Surveillance Tool](https://medium.com/@riccardocanella/how-i-resurrected-a-dead-library-and-accidentally-built-a-surveillance-tool-776aedb85341)
   - [🔮 The Web Is About to Change in a Way Most Developers Aren’t Ready For](https://medium.com/@riccardocanella/the-web-is-about-to-change-in-a-way-most-developers-arent-ready-for-03306b821bff)
   - [🔮 We Broke Our Codebases for Humans. Agents Want Them Back in One Piece.](https://medium.com/@riccardocanella/we-broke-our-codebases-for-humans-agents-want-them-back-in-one-piece-e07418c27382)
