@@ -1,5 +1,11 @@
 # thecreazy
 
+## 3.1.2
+
+### Patch Changes
+
+- 9809fca: missing article
+
 ## 3.1.1
 
 ### Patch Changes
